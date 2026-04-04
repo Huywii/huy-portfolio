@@ -9,39 +9,42 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* Reset & global styles */
     * { box-sizing: border-box; margin:0; padding:0; }
     body { font-family: 'Inter', sans-serif; background:#0f172a; color:white; line-height:1.6; }
     a { color:#38bdf8; text-decoration:none; }
     a:hover { text-decoration:underline; }
-
-    /* Layout */
     .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-    h1 { font-size: 3rem; color:#38bdf8; }
+    h1 { font-size: 3rem; color:#38bdf8; text-align:center; }
     h2 { font-size: 2rem; color:#38bdf8; margin-top:40px; margin-bottom:20px; }
     h3 { color:#fff; margin-bottom:10px; }
     .section { margin-top:60px; }
     .card { background:#1e293b; padding:25px; margin-top:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
-
-    /* Buttons / CTA */
     .btn { display:inline-block; background:#38bdf8; color:#0f172a; padding:12px 24px; border-radius:8px; font-weight:600; margin-top:15px; }
     .btn:hover { background:#0ea5e9; }
-
-    /* Lists */
     ul { padding-left:20px; margin-top:10px; }
     li { margin-bottom:8px; }
 
     /* Chatbot placeholder */
     #chatbot { position: fixed; bottom: 20px; right: 20px; width: 350px; height: 500px; border-radius: 15px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.5); display:none; }
+
+    /* Collapsible styles */
+    details summary { cursor: pointer; font-weight: 600; padding:10px 0; list-style:none; }
+    details[open] { animation: expand 0.3s ease-in-out; }
+    @keyframes expand { from { opacity:0; transform: translateY(-5px); } to { opacity:1; transform: translateY(0); } }
+
+    /* Profile picture */
+    .profile-img { width:150px; height:150px; border-radius:50%; border:3px solid #38bdf8; display:block; margin:0 auto 20px auto; }
+    .center { text-align:center; }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <!-- Hero -->
+    <!-- Hero with Profile Picture -->
+    <img src="https://github.com/your-username/your-repo-name/raw/main/profile.jpg" alt="Huy Ho" class="profile-img">
     <h1>Huy Ho</h1>
-    <p style="font-size:1.2rem;">Senior Product Manager | AI | SaaS | Compliance</p>
-    <a href="#contact" class="btn">Contact Me</a>
+    <p class="center" style="font-size:1.2rem;">Senior Product Manager | AI | SaaS | Compliance</p>
+    <a href="#contact" class="btn center" style="display:block; margin:20px auto;">Contact Me</a>
 
     <!-- Professional Summary -->
     <div class="section" id="summary">
@@ -55,8 +58,8 @@
     <div class="section" id="experience">
       <h2>Experience</h2>
 
-      <div class="card">
-        <h3>HITRUST — Senior Product Manager (2025–Present)</h3>
+      <details class="card">
+        <summary>HITRUST — Senior Product Manager (2025–Present)</summary>
         <ul>
           <li>Led roadmap delivery for compliance platform serving thousands of organizations</li>
           <li>Reduced manual oversight by 30% through automation</li>
@@ -64,71 +67,72 @@
           <li>Improved scalability and reduced support tickets by 10%</li>
           <li>Aligned product execution with enterprise strategy and executive leadership</li>
         </ul>
-      </div>
+      </details>
 
-      <div class="card">
-        <h3>Wolters Kluwer — Senior Technology Product Manager</h3>
+      <details class="card">
+        <summary>Wolters Kluwer — Senior Technology Product Manager</summary>
         <ul>
           <li>Integrated 140,000+ transaction citations into CCH SureTax</li>
           <li>Led Pendo integration for feature tracking and analytics</li>
           <li>Improved product engagement and roadmap decisions through data</li>
           <li>Conducted pricing optimization and market research</li>
         </ul>
-      </div>
+      </details>
 
-      <div class="card">
-        <h3>Thomson Reuters — Senior Implementation Specialist / Tax Analyst</h3>
+      <details class="card">
+        <summary>Thomson Reuters — Senior Implementation Specialist / Tax Analyst</summary>
         <ul>
           <li>Implemented indirect tax solutions within SAP systems</li>
           <li>Led technical integrations and troubleshooting</li>
           <li>Improved compliance accuracy and system performance</li>
           <li>Mentored analysts and led training programs</li>
         </ul>
-      </div>
+      </details>
     </div>
 
     <!-- Case Studies -->
     <div class="section" id="projects">
       <h2>Key Projects (Case Study Style)</h2>
 
-      <div class="card">
-        <h3>Certification Revocation Initiative</h3>
+      <details class="card">
+        <summary>Certification Revocation Initiative</summary>
         <p><strong>Problem:</strong> Lack of real-time certification visibility</p>
         <p><strong>Solution:</strong> Built automated tracking system</p>
         <p><strong>Impact:</strong> Reduced manual oversight by 30%</p>
-      </div>
+      </details>
 
-      <div class="card">
-        <h3>AI Security Certification Expansion</h3>
+      <details class="card">
+        <summary>AI Security Certification Expansion</summary>
         <p><strong>Problem:</strong> Limited AI compliance coverage</p>
         <p><strong>Solution:</strong> Expanded certification to include AI frameworks</p>
         <p><strong>Impact:</strong> Increased adoption and transparency</p>
-      </div>
+      </details>
 
-      <div class="card">
-        <h3>Pendo Integration</h3>
+      <details class="card">
+        <summary>Pendo Integration</summary>
         <p><strong>Problem:</strong> No product usage visibility</p>
         <p><strong>Solution:</strong> Implemented analytics tracking</p>
         <p><strong>Impact:</strong> Improved feature adoption and roadmap decisions</p>
-      </div>
+      </details>
     </div>
 
     <!-- Skills -->
     <div class="section" id="skills">
       <h2>Skills</h2>
-      <div class="card">
+      <details class="card">
+        <summary>Click to view skills</summary>
         Product Management, AI, SaaS, SQL, PowerBI, Tableau, JIRA, Azure DevOps, Pendo, Salesforce, Figma, Tax Systems, Compliance Platforms
-      </div>
+      </details>
     </div>
 
     <!-- Projects -->
     <div class="section" id="simply-auto">
       <h2>Projects</h2>
-      <div class="card">
-        <strong>Simply Auto (Concept)</strong><br>
+      <details class="card">
+        <summary>Simply Auto (Concept)</summary>
         AI-powered platform connecting users to mechanics, wrap shops, and service providers through guided workflows.
         <br><a href="#" class="btn" onclick="openDemo()">View Interactive Demo</a>
-      </div>
+      </details>
     </div>
 
     <!-- Contact -->
@@ -149,7 +153,6 @@
 
   <!-- Scripts for interactivity -->
   <script>
-    // Placeholder for AI demo / chatbot interaction
     function openDemo() {
       alert("Interactive Simply Auto demo coming soon! We will embed a Figma or Bubble prototype here.");
     }
@@ -158,6 +161,5 @@
       document.getElementById('chatbot').querySelector('iframe').src = url;
     }
   </script>
-<script src="//code.tidio.co/tucioqts2nknzowz5n5rqbiwjtkebsqh.js" async></script>
 </body>
 </html>
