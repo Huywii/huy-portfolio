@@ -19,13 +19,10 @@
     h3 { color:#fff; margin-bottom:10px; }
     .section { margin-top:60px; }
     .card { background:#1e293b; padding:25px; margin-top:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
-    .btn { display:inline-block; background:#38bdf8; color:#0f172a; padding:12px 24px; border-radius:8px; font-weight:600; margin-top:15px; }
+    .btn { display:inline-block; background:#38bdf8; color:#0f172a; padding:12px 24px; border-radius:8px; font-weight:600; margin-top:15px; cursor:pointer; border:none; }
     .btn:hover { background:#0ea5e9; }
     ul { padding-left:20px; margin-top:10px; }
     li { margin-bottom:8px; }
-
-    /* Chatbot placeholder */
-    #chatbot { position: fixed; bottom: 20px; right: 20px; width: 350px; height: 500px; border-radius: 15px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.5); display:none; }
 
     /* Collapsible styles */
     details summary { cursor: pointer; font-weight: 600; padding:10px 0; list-style:none; }
@@ -33,15 +30,21 @@
     @keyframes expand { from { opacity:0; transform: translateY(-5px); } to { opacity:1; transform: translateY(0); } }
 
     /* Profile picture */
-    .profile-img { width:150px; height:150px; border-radius:50%; border:3px solid #38bdf8; display:block; margin:0 auto 20px auto; }
+    .profile-img { width:150px; height:150px; border-radius:50%; border:3px solid #38bdf8; display:block; margin:0 auto 20px auto; box-shadow:0 4px 10px rgba(0,0,0,0.5); transition: transform 0.3s; }
+    .profile-img:hover { transform: scale(1.05); }
     .center { text-align:center; }
+
+    /* Chatbot */
+    #chatbot { position: fixed; bottom: 20px; right: 20px; width: 350px; height: 500px; border-radius: 15px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.5); display:none; z-index:1000; }
+    #chatbot button { position:absolute; top:5px; right:5px; z-index:10; background:red; color:white; border:none; border-radius:5px; padding:5px 10px; cursor:pointer; }
+    #chatbot iframe { width:100%; height:100%; border:none; border-radius:12px; }
   </style>
 </head>
 
 <body>
   <div class="container">
     <!-- Hero with Profile Picture -->
-<img src="https://raw.githubusercontent.com/Huywii/huy-portfolio/main/Gemini_Generated_Image_uo42tuo42tuo42tu.png" alt="Huy Ho" class="profile-img">
+    <img src="https://raw.githubusercontent.com/Huywii/huy-portfolio/main/Gemini_Generated_Image_uo42tuo42tuo42tu.png" alt="Huy Ho" class="profile-img">
     <h1>Huy Ho</h1>
     <p class="center" style="font-size:1.2rem;">Senior Product Manager | AI | SaaS | Compliance</p>
     <a href="#contact" class="btn center" style="display:block; margin:20px auto;">Contact Me</a>
@@ -57,7 +60,6 @@
     <!-- Experience -->
     <div class="section" id="experience">
       <h2>Experience</h2>
-
       <details class="card">
         <summary>HITRUST — Senior Product Manager (2025–Present)</summary>
         <ul>
@@ -93,7 +95,6 @@
     <!-- Case Studies -->
     <div class="section" id="projects">
       <h2>Key Projects (Case Study Style)</h2>
-
       <details class="card">
         <summary>Certification Revocation Initiative</summary>
         <p><strong>Problem:</strong> Lack of real-time certification visibility</p>
@@ -143,22 +144,31 @@
         LinkedIn: <a href="https://linkedin.com/in/huy-h-02a0a7108" target="_blank">linkedin.com/in/huy-h-02a0a7108</a>
       </div>
     </div>
-
   </div>
 
-  <!-- Chatbot iframe placeholder -->
+  <!-- Floating Chatbot Button -->
+  <button class="btn" style="position:fixed; bottom:40px; right:40px; z-index:1000;" onclick="openChatbot()">
+    Chat with Me
+  </button>
+
+  <!-- Chatbot iframe -->
   <div id="chatbot">
-    <iframe src="" width="100%" height="100%" frameborder="0"></iframe>
+    <button onclick="closeChatbot()">X</button>
+    <iframe src="https://your-real-chatbot-link.com/embed" width="100%" height="100%" frameborder="0"></iframe>
   </div>
 
-  <!-- Scripts for interactivity -->
+  <!-- Scripts -->
   <script>
     function openDemo() {
       alert("Interactive Simply Auto demo coming soon! We will embed a Figma or Bubble prototype here.");
     }
-    function openChatbot(url) {
+
+    function openChatbot() {
       document.getElementById('chatbot').style.display = 'block';
-      document.getElementById('chatbot').querySelector('iframe').src = url;
+    }
+
+    function closeChatbot() {
+      document.getElementById('chatbot').style.display = 'none';
     }
   </script>
 </body>
