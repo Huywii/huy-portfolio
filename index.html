@@ -1,114 +1,163 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Huy Ho | Senior Product Manager</title>
+
+  <!-- Google Fonts for modern typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
-    body { font-family: Arial; margin: 40px; background:#0f172a; color:white; line-height:1.6;}
-    h1, h2 { color:#38bdf8; }
-    .section { margin-top:50px; }
-    .card { background:#1e293b; padding:20px; margin-top:20px; border-radius:10px;}
+    /* Reset & global styles */
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: 'Inter', sans-serif; background:#0f172a; color:white; line-height:1.6; }
+    a { color:#38bdf8; text-decoration:none; }
+    a:hover { text-decoration:underline; }
+
+    /* Layout */
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+    h1 { font-size: 3rem; color:#38bdf8; }
+    h2 { font-size: 2rem; color:#38bdf8; margin-top:40px; margin-bottom:20px; }
+    h3 { color:#fff; margin-bottom:10px; }
+    .section { margin-top:60px; }
+    .card { background:#1e293b; padding:25px; margin-top:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
+
+    /* Buttons / CTA */
+    .btn { display:inline-block; background:#38bdf8; color:#0f172a; padding:12px 24px; border-radius:8px; font-weight:600; margin-top:15px; }
+    .btn:hover { background:#0ea5e9; }
+
+    /* Lists */
+    ul { padding-left:20px; margin-top:10px; }
+    li { margin-bottom:8px; }
+
+    /* Chatbot placeholder */
+    #chatbot { position: fixed; bottom: 20px; right: 20px; width: 350px; height: 500px; border-radius: 15px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.5); display:none; }
   </style>
 </head>
 
 <body>
+  <div class="container">
+    <!-- Hero -->
+    <h1>Huy Ho</h1>
+    <p style="font-size:1.2rem;">Senior Product Manager | AI | SaaS | Compliance</p>
+    <a href="#contact" class="btn">Contact Me</a>
 
-<h1>Huy Ho</h1>
-<p>Senior Product Manager | AI | SaaS | Compliance</p>
+    <!-- Professional Summary -->
+    <div class="section" id="summary">
+      <h2>Professional Summary</h2>
+      <div class="card">
+        Senior Product Manager with 9 years of experience across cybersecurity, healthcare compliance, and tax technology. HITRUST CSF Certified Practitioner with hands-on experience building scalable, compliant platforms and leading cross-functional teams to deliver measurable business impact.
+      </div>
+    </div>
 
-<div class="section">
-<h2>Professional Summary</h2>
-<div class="card">
-Senior Product Manager with 9 years of experience across cybersecurity, healthcare compliance, and tax technology.
-HITRUST CSF Certified Practitioner with hands-on experience building scalable, compliant platforms and leading
-cross-functional teams to deliver measurable business impact.
-</div>
-</div>
+    <!-- Experience -->
+    <div class="section" id="experience">
+      <h2>Experience</h2>
 
-<div class="section">
-<h2>Experience</h2>
+      <div class="card">
+        <h3>HITRUST — Senior Product Manager (2025–Present)</h3>
+        <ul>
+          <li>Led roadmap delivery for compliance platform serving thousands of organizations</li>
+          <li>Reduced manual oversight by 30% through automation</li>
+          <li>Advanced AI Security Certification program</li>
+          <li>Improved scalability and reduced support tickets by 10%</li>
+          <li>Aligned product execution with enterprise strategy and executive leadership</li>
+        </ul>
+      </div>
 
-<div class="card">
-<h3>HITRUST — Senior Product Manager (2025–Present)</h3>
-<ul>
-<li>Led roadmap delivery for compliance platform serving thousands of organizations</li>
-<li>Reduced manual oversight by 30% through automation</li>
-<li>Advanced AI Security Certification program</li>
-<li>Improved scalability and reduced support tickets by 10%</li>
-<li>Aligned product execution with enterprise strategy and executive leadership</li>
-</ul>
-</div>
+      <div class="card">
+        <h3>Wolters Kluwer — Senior Technology Product Manager</h3>
+        <ul>
+          <li>Integrated 140,000+ transaction citations into CCH SureTax</li>
+          <li>Led Pendo integration for feature tracking and analytics</li>
+          <li>Improved product engagement and roadmap decisions through data</li>
+          <li>Conducted pricing optimization and market research</li>
+        </ul>
+      </div>
 
-<div class="card">
-<h3>Wolters Kluwer — Senior Technology Product Manager</h3>
-<ul>
-<li>Integrated 140,000+ transaction citations into CCH SureTax</li>
-<li>Led Pendo integration for feature tracking and analytics</li>
-<li>Improved product engagement and roadmap decisions through data</li>
-<li>Conducted pricing optimization and market research</li>
-</ul>
-</div>
+      <div class="card">
+        <h3>Thomson Reuters — Senior Implementation Specialist / Tax Analyst</h3>
+        <ul>
+          <li>Implemented indirect tax solutions within SAP systems</li>
+          <li>Led technical integrations and troubleshooting</li>
+          <li>Improved compliance accuracy and system performance</li>
+          <li>Mentored analysts and led training programs</li>
+        </ul>
+      </div>
+    </div>
 
-<div class="card">
-<h3>Thomson Reuters — Senior Implementation Specialist / Tax Analyst</h3>
-<ul>
-<li>Implemented indirect tax solutions within SAP systems</li>
-<li>Led technical integrations and troubleshooting</li>
-<li>Improved compliance accuracy and system performance</li>
-<li>Mentored analysts and led training programs</li>
-</ul>
-</div>
+    <!-- Case Studies -->
+    <div class="section" id="projects">
+      <h2>Key Projects (Case Study Style)</h2>
 
-</div>
+      <div class="card">
+        <h3>Certification Revocation Initiative</h3>
+        <p><strong>Problem:</strong> Lack of real-time certification visibility</p>
+        <p><strong>Solution:</strong> Built automated tracking system</p>
+        <p><strong>Impact:</strong> Reduced manual oversight by 30%</p>
+      </div>
 
-<div class="section">
-<h2>Key Projects (Case Study Style)</h2>
+      <div class="card">
+        <h3>AI Security Certification Expansion</h3>
+        <p><strong>Problem:</strong> Limited AI compliance coverage</p>
+        <p><strong>Solution:</strong> Expanded certification to include AI frameworks</p>
+        <p><strong>Impact:</strong> Increased adoption and transparency</p>
+      </div>
 
-<div class="card">
-<h3>Certification Revocation Initiative</h3>
-<p><strong>Problem:</strong> Lack of real-time certification visibility</p>
-<p><strong>Solution:</strong> Built automated tracking system</p>
-<p><strong>Impact:</strong> Reduced manual oversight by 30%</p>
-</div>
+      <div class="card">
+        <h3>Pendo Integration</h3>
+        <p><strong>Problem:</strong> No product usage visibility</p>
+        <p><strong>Solution:</strong> Implemented analytics tracking</p>
+        <p><strong>Impact:</strong> Improved feature adoption and roadmap decisions</p>
+      </div>
+    </div>
 
-<div class="card">
-<h3>AI Security Certification Expansion</h3>
-<p><strong>Problem:</strong> Limited AI compliance coverage</p>
-<p><strong>Solution:</strong> Expanded certification to include AI frameworks</p>
-<p><strong>Impact:</strong> Increased adoption and transparency</p>
-</div>
+    <!-- Skills -->
+    <div class="section" id="skills">
+      <h2>Skills</h2>
+      <div class="card">
+        Product Management, AI, SaaS, SQL, PowerBI, Tableau, JIRA, Azure DevOps, Pendo, Salesforce, Figma, Tax Systems, Compliance Platforms
+      </div>
+    </div>
 
-<div class="card">
-<h3>Pendo Integration</h3>
-<p><strong>Problem:</strong> No product usage visibility</p>
-<p><strong>Solution:</strong> Implemented analytics tracking</p>
-<p><strong>Impact:</strong> Improved feature adoption and roadmap decisions</p>
-</div>
+    <!-- Projects -->
+    <div class="section" id="simply-auto">
+      <h2>Projects</h2>
+      <div class="card">
+        <strong>Simply Auto (Concept)</strong><br>
+        AI-powered platform connecting users to mechanics, wrap shops, and service providers through guided workflows.
+        <br><a href="#" class="btn" onclick="openDemo()">View Interactive Demo</a>
+      </div>
+    </div>
 
-</div>
+    <!-- Contact -->
+    <div class="section" id="contact">
+      <h2>Contact</h2>
+      <div class="card">
+        Email: <a href="mailto:Huyhenryho@yahoo.com">Huyhenryho@yahoo.com</a><br>
+        LinkedIn: <a href="https://linkedin.com/in/huy-h-02a0a7108" target="_blank">linkedin.com/in/huy-h-02a0a7108</a>
+      </div>
+    </div>
 
-<div class="section">
-<h2>Skills</h2>
-<div class="card">
-Product Management, AI, SaaS, SQL, PowerBI, Tableau, JIRA, Azure DevOps,
-Pendo, Salesforce, Figma, Tax Systems, Compliance Platforms
-</div>
-</div>
+  </div>
 
-<div class="section">
-<h2>Projects</h2>
-<div class="card">
-<strong>Simply Auto (Concept)</strong><br>
-AI-powered platform connecting users to mechanics, wrap shops, and service providers through guided workflows.
-</div>
-</div>
+  <!-- Chatbot iframe placeholder -->
+  <div id="chatbot">
+    <iframe src="" width="100%" height="100%" frameborder="0"></iframe>
+  </div>
 
-<div class="section">
-<h2>Contact</h2>
-<div class="card">
-Email: Huyhenryho@yahoo.com<br>
-LinkedIn: linkedin.com/in/huy-h-02a0a7108
-</div>
-</div>
+  <!-- Scripts for interactivity -->
+  <script>
+    // Placeholder for AI demo / chatbot interaction
+    function openDemo() {
+      alert("Interactive Simply Auto demo coming soon! We will embed a Figma or Bubble prototype here.");
+    }
+    function openChatbot(url) {
+      document.getElementById('chatbot').style.display = 'block';
+      document.getElementById('chatbot').querySelector('iframe').src = url;
+    }
+  </script>
 
 </body>
 </html>
