@@ -9,37 +9,52 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
+    /* Global Styles */
     * { box-sizing: border-box; margin:0; padding:0; }
     body { font-family: 'Inter', sans-serif; background:#0f172a; color:white; line-height:1.6; }
     a { color:#38bdf8; text-decoration:none; }
     a:hover { text-decoration:underline; }
+
     .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
     h1 { font-size: 3rem; color:#38bdf8; text-align:center; }
     h2 { font-size: 2rem; color:#38bdf8; margin-top:40px; margin-bottom:20px; }
     h3 { color:#fff; margin-bottom:10px; }
     .section { margin-top:60px; }
     .card { background:#1e293b; padding:25px; margin-top:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
-    .btn { display:inline-block; background:#38bdf8; color:#0f172a; padding:12px 24px; border-radius:8px; font-weight:600; margin-top:15px; cursor:pointer; border:none; }
+    .btn { display:inline-block; background:#38bdf8; color:#0f172a; padding:12px 24px; border-radius:8px; font-weight:600; margin-top:15px; }
     .btn:hover { background:#0ea5e9; }
     ul { padding-left:20px; margin-top:10px; }
     li { margin-bottom:8px; }
+    .center { text-align:center; }
+
+    /* Profile picture */
+    .profile-img { width:150px; height:150px; border-radius:50%; border:3px solid #38bdf8; display:block; margin:0 auto 20px auto; }
 
     /* Collapsible styles */
     details summary { cursor: pointer; font-weight: 600; padding:10px 0; list-style:none; }
     details[open] { animation: expand 0.3s ease-in-out; }
     @keyframes expand { from { opacity:0; transform: translateY(-5px); } to { opacity:1; transform: translateY(0); } }
 
-    /* Profile picture */
-    .profile-img { width:150px; height:150px; border-radius:50%; border:3px solid #38bdf8; display:block; margin:0 auto 20px auto; box-shadow:0 4px 10px rgba(0,0,0,0.5); transition: transform 0.3s; }
-    .profile-img:hover { transform: scale(1.05); }
-    .center { text-align:center; }
+    /* Chatbot placeholder */
+    #chatbot { position: fixed; bottom: 20px; right: 20px; width: 350px; height: 500px; border-radius: 15px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.5); display:none; z-index:1000; }
+
+    /* Mobile adjustments */
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.5rem; }
+      .container { padding: 20px 15px; }
+      .btn { width: 100%; text-align: center; padding: 12px; }
+      .profile-img { width: 120px; height: 120px; }
+      ul { padding-left: 15px; }
+      #chatbot { width: 90%; height: 400px; bottom: 15px; right: 5%; }
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
-<!-- Hero with Profile Picture -->
-<img src="https://raw.githubusercontent.com/Huywii/huy-portfolio/main/Gemini_Generated_Image_fulh4zfulh4zfulh.png" alt="Huy Ho" class="profile-img">
+    <!-- Hero / Profile Picture -->
+    <img src="https://raw.githubusercontent.com/Huywii/huy-portfolio/main/Gemini_Generated_Image_fulh4zfulh4zfulh.png" alt="Huy Ho" class="profile-img">
     <h1>Huy Ho</h1>
     <p class="center" style="font-size:1.2rem;">Senior Product Manager | AI | SaaS | Compliance</p>
     <a href="#contact" class="btn center" style="display:block; margin:20px auto;">Contact Me</a>
@@ -47,14 +62,16 @@
     <!-- Professional Summary -->
     <div class="section" id="summary">
       <h2>Professional Summary</h2>
-      <div class="card">
+      <details class="card" open>
+        <summary>Click to expand</summary>
         Senior Product Manager with 9 years of experience across cybersecurity, healthcare compliance, and tax technology. HITRUST CSF Certified Practitioner with hands-on experience building scalable, compliant platforms and leading cross-functional teams to deliver measurable business impact.
-      </div>
+      </details>
     </div>
 
     <!-- Experience -->
     <div class="section" id="experience">
       <h2>Experience</h2>
+
       <details class="card">
         <summary>HITRUST — Senior Product Manager (2025–Present)</summary>
         <ul>
@@ -90,6 +107,7 @@
     <!-- Case Studies -->
     <div class="section" id="projects">
       <h2>Key Projects (Case Study Style)</h2>
+
       <details class="card">
         <summary>Certification Revocation Initiative</summary>
         <p><strong>Problem:</strong> Lack of real-time certification visibility</p>
@@ -121,13 +139,13 @@
       </details>
     </div>
 
-    <!-- Projects -->
+    <!-- Simply Auto Project -->
     <div class="section" id="simply-auto">
       <h2>Projects</h2>
       <details class="card">
         <summary>Simply Auto (Concept)</summary>
         AI-powered platform connecting users to mechanics, wrap shops, and service providers through guided workflows.
-        <br><button class="btn" onclick="openDemo()">View Interactive Demo</button>
+        <br><a href="#" class="btn" onclick="openDemo()">View Interactive Demo</a>
       </details>
     </div>
 
@@ -141,14 +159,14 @@
     </div>
   </div>
 
-  <!-- Scripts for interactivity -->
+  <!-- Tidio Chatbot -->
+  <script src="//code.tidio.co/tucioqts2nknzowz5n5rqbiwjtkebsqh.js" async></script>
+
+  <!-- Scripts -->
   <script>
     function openDemo() {
       alert("Interactive Simply Auto demo coming soon! We will embed a Figma or Bubble prototype here.");
     }
   </script>
-
-  <!-- Tidio Chatbot -->
-  <script src="//code.tidio.co/tucioqts2nknzowz5n5rqbiwjtkebsqh.js" async></script>
 </body>
 </html>
