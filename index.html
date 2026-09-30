@@ -76,7 +76,7 @@
       line-height: 1.1;
       margin-top: 20px;
     }
-    .rail .role { font-weight: 600; margin-top: 6px; }
+    .rail .title { font-weight: 600; margin-top: 6px; }
     .rail .where { color: var(--muted); font-size: 0.95rem; }
 
     .status {
@@ -154,7 +154,7 @@
       font-size: clamp(2rem, 4.2vw, 3.1rem);
       line-height: 1.12;
       letter-spacing: -0.01em;
-      max-width: 17ch;
+      max-width: 26ch;
     }
     .intro p.lede {
       margin-top: 24px;
@@ -347,17 +347,17 @@
     <aside class="rail" aria-label="Profile">
       <img class="photo" src="https://raw.githubusercontent.com/Huywii/huy-portfolio/main/Gemini_Generated_Image_fulh4zfulh4zfulh.png" alt="Portrait of Huy Ho">
       <p class="name">Huy Ho</p>
-      <p class="role">Senior Product Manager</p>
+      <p class="title">Senior Product Manager</p>
       <p class="where">Denton, TX (Dallas–Fort Worth)</p>
       <span class="status">Open to Senior PM roles</span>
 
       <nav class="nav" aria-label="Sections">
         <ul>
           <li><a href="#about">About</a></li>
+          <li><a href="#projects">Side projects</a></li>
           <li><a href="#experience">Experience</a></li>
           <li><a href="#skills">Skills</a></li>
           <li><a href="#education">Education</a></li>
-          <li><a href="#projects">Side projects</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
@@ -410,9 +410,28 @@
             <span>Wolters Kluwer</span>
           </div>
           <div>
-            <strong>~10 min</strong>
-            <p>To investigate a product issue, down from about 2 hours, using session replay</p>
-            <span>HITRUST</span>
+            <strong>+10%</strong>
+            <p>Successful API call rate for CCH SureTax, the tax engine ERP systems call in real time</p>
+            <span>Wolters Kluwer</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Side projects -->
+      <section id="projects">
+        <h2>Side projects</h2>
+        <div class="pair">
+          <div class="panel feature">
+            <h3>How sales tax software works: calculating tax and managing tax-exempt customers</h3>
+            <p>An interactive 3D model of the software businesses use to charge the right sales tax. Follow a sales invoice through a tax engine as it checks the address, applies the rules, and calculates the tax. Then follow a tax-exemption certificate, the form a customer such as a reseller provides to buy without paying sales tax, through exemption certificate management (ECM) as it is collected, validated, and stored. Each step explains what happens and shows sample data.</p>
+            <span class="pill">Interactive 3D</span>
+            <div><a class="btn btn-primary" href="tax-engine-ecm.html" target="_blank" rel="noopener">Open the 3D model</a></div>
+          </div>
+          <div class="panel">
+            <h3>Resume Circuit</h3>
+            <p>I'm passionate about cars, so I built a 3D driving game around my resume. Drive a car inspired by the second-generation Audi R8 around a race circuit, and each sector gate shows a stop in my career. It works on desktop with the keyboard and on phones with on-screen pedals.</p>
+            <span class="pill">3D driving game</span>
+            <div><a class="btn btn-primary" href="resume-circuit.html" target="_blank" rel="noopener">Drive a lap</a></div>
           </div>
         </div>
       </section>
@@ -422,29 +441,29 @@
         <h2>Experience</h2>
         <div class="timeline">
 
-          <article class="role current">
+          <article class="role">
             <div class="role-head">
               <h3>Senior Product Manager</h3>
               <span class="dates">May 2025 – Sep 2026</span>
             </div>
             <p class="org">HITRUST, Frisco, TX</p>
             <ul>
-              <li>Owned product strategy and roadmap delivery for HITRUST's MyCSF compliance and certification platform, serving 4,500 users across 2,000 accounts; prioritized usability improvements that reduced the time required for customers to complete HITRUST assessments.</li>
-              <li>Drove cross-functional implementation of a strategic pricing and packaging transformation with Bain &amp; Company, translating new subscription models into MyCSF product workflows and Salesforce order processes, enabling accurate subscription provisioning and contributing to 20% company ARR growth.</li>
-              <li>Established Pendo implementation and product analytics strategy across 2 applications, tagging 50+ pages and 300+ features and launching 15 targeted in-product guides in 3 months; increased adoption of targeted features by 40% and reduced support tickets by 20%.</li>
-              <li>Built and defended the business case for Pendo to executive leadership, presenting to ~30 stakeholders and becoming the organization's primary Pendo owner; integrated Pendo with Salesforce to connect behavioral data with account, ARR, customer type, and product information, enabling data-driven customer insights.</li>
+              <li>Owned strategy and roadmap for MyCSF, HITRUST's compliance and certification platform, serving 4,500 users across 2,000 accounts.</li>
+              <li>Implemented a new pricing and packaging model with Bain &amp; Company across product workflows and Salesforce, contributing to 20% company ARR growth.</li>
+              <li>Launched Pendo analytics and 15 in-app guides across 2 applications in 3 months, raising targeted feature adoption 40% and cutting support tickets 20%.</li>
+              <li>Built the executive business case for Pendo and connected it to Salesforce to tie product usage to accounts and ARR.</li>
             </ul>
             <details>
               <summary><span class="more">Show 8 more</span><span class="less">Show less</span></summary>
               <ul>
-                <li>Launched targeted in-app CCSFP/CHQP renewal and enrollment experiences that contributed $40K in revenue within the first month by re-engaging previously expired customers and prompting customers approaching expiration to renew.</li>
-                <li>Drove product requirements and cross-functional delivery for Report Center, helping transition sensitive report distribution from emailed PDFs to an authenticated, permission-controlled workflow with recipient watermarking and QR-based validation to strengthen report authenticity and reduce tampering and fraud risk.</li>
-                <li>Used behavioral analytics and session replay to identify customer friction and product issues, reducing issue investigation time from ~2 hours to ~10 minutes and enabling faster diagnosis without relying on manual reproduction.</li>
-                <li>Delivered the Certification Revocation Initiative, delivering real-time certification-status visibility and reducing manual oversight by 30% through automation.</li>
-                <li>Defined the product strategy for an AI Questionnaire automation that leverages historical customer assessment data to automatically populate compliance questionnaires, significantly reducing manual effort.</li>
-                <li>Shaped product strategy and requirements for an in-development assurance initiative focused on identifying organizations seeking security assurance, AI-assisted evidence evaluation, and lightweight entry-level assessments, shaping new pathways into HITRUST's certification ecosystem.</li>
-                <li>Accelerated backlog refinement and sprint readiness by leveraging generative AI to draft dev-ready user stories, identify cross-initiative dependencies, and identify gaps and ambiguities in requirements.</li>
-                <li>Guided customer enablement for major product launches, including Report Center, through in-product guidance, user documentation, and customer webinars supporting adoption of new authenticated and watermarked reporting capabilities.</li>
+                <li>Launched in-app CCSFP/CHQP renewal and enrollment experiences that brought in $40K in the first month.</li>
+                <li>Led Report Center, replacing emailed PDFs with an authenticated, permission-controlled workflow with watermarking and QR validation.</li>
+                <li>Used session replay to cut issue investigation time from about 2 hours to about 10 minutes.</li>
+                <li>Delivered the Certification Revocation Initiative, adding real-time certification status and cutting manual oversight 30%.</li>
+                <li>Defined the strategy for AI questionnaire automation that pre-fills compliance questionnaires from historical assessment data.</li>
+                <li>Shaped requirements for a new assurance initiative, including AI-assisted evidence evaluation and lightweight entry-level assessments.</li>
+                <li>Used generative AI to draft dev-ready user stories and surface dependencies and requirement gaps before refinement.</li>
+                <li>Led customer enablement for launches such as Report Center through in-app guidance, documentation, and webinars.</li>
               </ul>
             </details>
           </article>
@@ -456,17 +475,17 @@
             </div>
             <p class="org">Wolters Kluwer, Coppell, TX</p>
             <ul>
-              <li>Led product strategy and roadmap execution for CCH SureTax, driving platform improvements that increased successful API call rates by 10% and reduced transaction processing errors.</li>
-              <li>Drove deployment of a Machine Learning SKU-mapping model that automatically categorized raw product descriptions, eliminating manual data mapping and improving calculation accuracy across the product catalog.</li>
-              <li>Established Pendo as the team's behavioral analytics platform across CCH SureTax (40 pages, 100 features), identifying user drop-off points and high-impact features for the first time, directly informing roadmap prioritization.</li>
-              <li>Delivered citation references across 140,000+ transaction types, giving customers direct access to the regulatory basis behind each tax calculation to support audit defense and compliance documentation.</li>
+              <li>Led strategy and roadmap for CCH SureTax, raising successful API call rates 10% and reducing transaction errors.</li>
+              <li>Deployed a machine learning SKU-mapping model that replaced manual product mapping and improved calculation accuracy.</li>
+              <li>Established Pendo analytics for SureTax (40 pages, 100 features), revealing drop-off points that shaped roadmap priorities.</li>
+              <li>Delivered citation references across 140,000+ transaction types to support customers' audit defense.</li>
             </ul>
             <details>
               <summary><span class="more">Show 3 more</span><span class="less">Show less</span></summary>
               <ul>
-                <li>Conducted 20+ customer interviews for CCH SureTax to identify pain points and shape roadmap priorities, later leveraging that research to help inform pricing strategy and packaging for CCH Investigator, an add-on to CCH SureTax.</li>
-                <li>Partnered with Sales, Support, and Marketing to prioritize customer-reported enhancements, bugs, and defects, meaningfully reducing related support ticket volume.</li>
-                <li>Automated SureTax account and user creation to trigger immediately upon order form submission, reducing customer onboarding time from 4 weeks to 1 week.</li>
+                <li>Ran 20+ customer interviews that shaped SureTax priorities and later informed pricing for the CCH Investigator add-on.</li>
+                <li>Partnered with Sales, Support, and Marketing to prioritize customer-reported issues, reducing related support tickets.</li>
+                <li>Automated account creation on order submission, cutting customer onboarding from 4 weeks to 1.</li>
               </ul>
             </details>
           </article>
@@ -478,16 +497,16 @@
             </div>
             <p class="org">Thomson Reuters, Carrollton, TX</p>
             <ul>
-              <li>Engaged as the subject matter expert on the implementation of ONESOURCE Indirect Tax in SAP ERP systems, ensuring seamless integration and compliance.</li>
-              <li>Performed technical and functional roles on indirect tax projects led by TR PMs, partner firms, and customers.</li>
-              <li>Consulted clients on business processes, configuring tax engines for optimal performance.</li>
+              <li>Served as subject matter expert for ONESOURCE Indirect Tax implementations in SAP ERP systems.</li>
+              <li>Filled technical and functional roles on indirect tax projects led by Thomson Reuters PMs, partner firms, and customers.</li>
+              <li>Advised clients on business processes and configured tax engines.</li>
             </ul>
             <details>
               <summary><span class="more">Show 3 more</span><span class="less">Show less</span></summary>
               <ul>
-                <li>Troubleshot and resolved software issues, providing effective solutions and workarounds.</li>
-                <li>Documented design and solutions from business and requirement sessions, ensuring clarity.</li>
-                <li>Managed projects through all phases, delivering on time and within scope.</li>
+                <li>Troubleshot and resolved software issues with fixes and workarounds.</li>
+                <li>Documented designs and solutions from business requirements sessions.</li>
+                <li>Managed projects through every phase, on time and within scope.</li>
               </ul>
             </details>
           </article>
@@ -499,18 +518,18 @@
             </div>
             <p class="org">Thomson Reuters, Carrollton, TX</p>
             <ul>
-              <li>Enhanced GoSystem tax software for federal and state projects, ensuring compliance and accuracy.</li>
-              <li>Designed and coded IRS tax forms, ensuring precise calculations and compliance.</li>
-              <li>Led annual training for new analysts on proprietary tools, improving team efficiency.</li>
+              <li>Enhanced GoSystem tax software for federal and state projects.</li>
+              <li>Designed and coded IRS tax forms.</li>
+              <li>Led annual training for new analysts on proprietary tools.</li>
             </ul>
             <details>
               <summary><span class="more">Show 5 more</span><span class="less">Show less</span></summary>
               <ul>
-                <li>Debugged and tested software, ensuring error-free tax returns for paper and e-file.</li>
-                <li>Collaborated with tax departments to cross-test systems, ensuring functionality and accuracy.</li>
-                <li>Partnered with cross-functional teams to streamline tax software updates, enhancing overall system integration.</li>
-                <li>Mentored junior analysts, improving their proficiency in proprietary development tools and increasing team productivity.</li>
-                <li>Developed new tax form designs in compliance with IRS regulations, ensuring up-to-date and accurate tax calculations.</li>
+                <li>Debugged and tested software for paper and e-filed tax returns.</li>
+                <li>Cross-tested systems with tax departments.</li>
+                <li>Partnered with cross-functional teams to streamline tax software updates.</li>
+                <li>Mentored junior analysts on proprietary development tools.</li>
+                <li>Developed new tax form designs to meet IRS regulations.</li>
               </ul>
             </details>
           </article>
@@ -522,15 +541,15 @@
             </div>
             <p class="org">Wolters Kluwer, Wichita, KS</p>
             <ul>
-              <li>Maintained and enhanced ProSystem and Axcess tax software, ensuring compliance with new regulations.</li>
-              <li>Implemented enhancements from customer requests and tax law changes, improving software functionality.</li>
-              <li>Addressed electronic filing rejects, ensuring successful tax return submissions.</li>
+              <li>Maintained and enhanced ProSystem and Axcess tax software.</li>
+              <li>Implemented enhancements from customer requests and tax law changes.</li>
+              <li>Resolved electronic filing rejects.</li>
             </ul>
             <details>
               <summary><span class="more">Show 2 more</span><span class="less">Show less</span></summary>
               <ul>
-                <li>Mentored analysts on tax queries, improving team knowledge and program efficiency.</li>
-                <li>Resolved time-sensitive queries, enhancing software usability and user satisfaction.</li>
+                <li>Mentored analysts on tax questions.</li>
+                <li>Resolved time-sensitive customer queries.</li>
               </ul>
             </details>
           </article>
@@ -571,25 +590,6 @@
           <p>Wichita State University, Wichita, KS</p>
           <p class="muted">Minor in Management, cum laude</p>
           <p class="muted">Languages: English, Vietnamese</p>
-        </div>
-      </section>
-
-      <!-- Side projects -->
-      <section id="projects">
-        <h2>Side projects</h2>
-        <div class="pair">
-          <div class="panel feature">
-            <h3>How sales tax software works: calculating tax and managing tax-exempt customers</h3>
-            <p>An interactive 3D model of the software businesses use to charge the right sales tax. Follow a sales invoice through a tax engine as it checks the address, applies the rules, and calculates the tax. Then follow a tax-exemption certificate, the form a customer such as a reseller provides to buy without paying sales tax, through exemption certificate management (ECM) as it is collected, validated, and stored. Each step explains what happens and shows sample data.</p>
-            <span class="pill">Interactive 3D</span>
-            <div><a class="btn btn-primary" href="tax-engine-ecm.html" target="_blank" rel="noopener">Open the 3D model</a></div>
-          </div>
-          <div class="panel">
-            <h3>Resume Circuit</h3>
-            <p>I'm passionate about cars, so I built a 3D driving game around my resume. Drive a car inspired by the second-generation Audi R8 around a race circuit, and each sector gate shows a stop in my career. It works on desktop with the keyboard and on phones with on-screen pedals.</p>
-            <span class="pill">3D driving game</span>
-            <div><a class="btn btn-primary" href="resume-circuit.html" target="_blank" rel="noopener">Drive a lap</a></div>
-          </div>
         </div>
       </section>
 
