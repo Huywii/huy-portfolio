@@ -128,7 +128,44 @@ canvas{display:block}
 .btn:focus-visible,.chip:focus-visible{outline:2px solid var(--client);outline-offset:2px}
 .btn.primary{background:var(--chip-active);color:var(--chip-active-text);border-color:var(--chip-active)}
 .btn[aria-pressed="true"]{border-color:var(--client);color:var(--client)}
-.seg{display:inline-flex;gap:4px;padding-right:6px;margin-right:2px;border-right:1px solid var(--border)}
+.flowpick{pointer-events:auto;margin-top:12px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:10px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.fp-label{font-size:12.5px;font-weight:800;color:var(--muted);margin:0 2px 8px}
+.fp-current{display:none;align-items:center;gap:10px;font-size:13.5px;color:var(--muted)}
+.fp-current b{color:var(--text)}
+.fp-switch{color:var(--client);text-decoration:underline;min-height:36px}
+.flowpick.collapsed{display:inline-block;padding:4px 6px 4px 12px}
+.flowpick.collapsed .fp-current{display:flex}
+.flowpick.collapsed .fp-label,.flowpick.collapsed .fp-btns{display:none}
+.top.started > p{display:none}
+.top.started .legend{margin-top:8px;font-size:12px;gap:4px 12px}
+.legend span[hidden]{display:none}
+.top.started{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:10px 12px;pointer-events:auto;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.top.started .flowpick{border:0;padding:0;background:none;margin-top:8px}
+.top.started h1{font-size:18px}
+.fp-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fp-btn{font:inherit;text-align:left;cursor:pointer;color:var(--text);background:var(--chip);border:2px solid var(--border);border-radius:10px;padding:9px 12px;min-height:52px;display:flex;flex-direction:column;gap:1px}
+.fp-btn b{font-size:14px;font-weight:800}
+.fp-btn span{font-size:12px;color:var(--muted)}
+.fp-btn:hover{border-color:var(--muted)}
+.fp-btn[aria-pressed="true"]{background:var(--chip-active);color:var(--chip-active-text);border-color:var(--chip-active)}
+.fp-btn[aria-pressed="true"] span{color:var(--chip-active-text);opacity:.85}
+.fp-btn:focus-visible,.choice:focus-visible{outline:3px solid var(--client);outline-offset:2px}
+.choose-title{font-size:14px;font-weight:800;margin:4px 0 8px}
+.intro-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.choice{font:inherit;text-align:left;cursor:pointer;color:var(--chip-active-text);background:var(--chip-active);border:2px solid var(--chip-active);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px;min-height:44px}
+.choice b{font-size:16px;font-weight:800}
+.choice span{font-size:13px;opacity:.88}
+.choice:hover{filter:brightness(1.12)}
+.intro-skip{font-size:14px;text-decoration:underline;padding:10px 4px;min-height:44px}
+.intro .intro-card{width:min(460px,100%)}
+.callout{background:var(--code);background:color-mix(in srgb,var(--client) 16%,transparent);border:1px solid var(--border);border:1px solid color-mix(in srgb,var(--client) 50%,transparent);color:var(--text);border-radius:12px;padding:14px 16px;margin:4px 0 14px}
+.intro-card .callout p{margin:0;color:var(--text)}
+.intro-card .callout .callout-main{font-size:17px;font-weight:800;line-height:1.3}
+.intro-card .callout .callout-by{font-size:13px;font-weight:700;color:var(--client);margin-top:6px}
+.built-by{font-size:12.5px;font-weight:700;color:var(--muted);margin-top:2px}
+.flow-name{font-weight:800;color:var(--text)}
+.rail[hidden],#speedBtn[hidden],#followBtn[hidden]{display:none !important}
+@media (min-width:761px){.controls{width:auto !important}}
 .hint{margin-left:auto;font-size:12px;color:var(--muted)}
 .rail{display:flex;gap:6px;overflow-x:auto;margin-top:10px;padding-bottom:2px;scrollbar-width:thin}
 .chip{
@@ -153,6 +190,11 @@ canvas{display:block}
 .panel-nav{display:flex;gap:8px;margin-top:12px}
 .panel-nav .btn{flex:1;padding:10px 12px;font-size:14.5px}
 .panel.collapsed .panel-body{display:none}
+.summary{font-size:15px !important;margin:0 0 6px !important}
+.more[hidden]{display:none}
+.more{margin-top:6px}
+.more-btn{color:var(--client);text-decoration:underline;padding:6px 0;min-height:36px;font-size:13.5px}
+@media (min-width:761px){#collapseBtn{display:none}}
 .seg .btn{font-size:14px;padding:8px 14px}
 .seg .btn[aria-pressed="true"]{background:var(--chip-active);color:var(--chip-active-text);border-color:var(--chip-active)}
 .bar-group{display:inline-flex;gap:6px;align-items:center}
@@ -193,11 +235,16 @@ canvas{display:block}
   .top h1{font-size:16px}
   .controls{padding:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:calc(100% - 16px)}
   .row{gap:6px}
-  .seg{display:flex;width:100%;border-right:0;padding:0;margin:0}
-  .seg .btn{flex:1;font-size:13px;padding:10px 6px;min-height:42px}
+  .top{right:12px;max-width:none}
+  .flowpick{margin-top:6px;padding:6px}
+  .fp-label{display:none}
+  .fp-btn{padding:6px 10px;min-height:44px}
+  .fp-btn b{font-size:13px}
+  .fp-btn span{display:none}
+  .intro-choices{grid-template-columns:1fr}
   .bar-group{flex:1;display:flex}
   .bar-group .btn{flex:1;min-height:42px}
-  .panel{left:8px;right:8px;bottom:calc(118px + env(safe-area-inset-bottom,0px));max-height:40vh}
+  .panel{left:8px;right:8px;bottom:calc(76px + env(safe-area-inset-bottom,0px));max-height:40vh}
   .panel-nav .btn{min-height:44px}
   .how{grid-template-columns:1fr}
   .intro-card{padding:18px}
@@ -210,36 +257,111 @@ canvas{display:block}
   .controls{padding:6px}
 }
 @media (prefers-reduced-motion:reduce){ .chip,.btn{transition:none} }
+
+/* ---- UI screen previews ---- */
+.ui-box{margin-top:14px;border-top:1px solid var(--border);padding-top:12px}
+.ui-box[hidden]{display:none}
+.ui-label{font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:8px}
+.ui-open{width:100%;margin-top:10px;padding:10px 12px}
+.scr{font-family:"Manrope",system-ui,sans-serif;color:#16212E;background:#F4F6F8;border-radius:12px;padding:10px;font-size:13px;line-height:1.4}
+.scr *{box-sizing:border-box}
+.scr-card{position:relative;background:#FFFFFF;border:1px solid #DCE3EA;border-radius:12px;padding:12px 14px}
+.scr-focus{box-shadow:0 0 0 3px #E0913A}
+.scr-tag{position:absolute;top:-11px;right:12px;background:#E0913A;color:#1A1206;font-size:11px;font-weight:800;padding:2px 9px;border-radius:99px}
+.scr h4{margin:0 0 8px;font-size:14px;font-weight:800}
+.scr h5{margin:0;font-size:13px;font-weight:800}
+.scr-muted{color:#4A5A6B}
+.scr-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;color:#1F4E79}
+.scr-row{display:flex;justify-content:space-between;gap:10px;font-variant-numeric:tabular-nums}
+.scr-row.strong{font-weight:800}
+.scr-stage{display:flex;gap:10px;padding:8px 0;border-top:1px solid #E6ECF1}
+.scr-stage:first-of-type{border-top:0}
+.scr-num{width:22px;height:22px;border-radius:50%;background:#1F4E79;color:#FFFFFF;font-size:11.5px;font-weight:800;display:grid;place-items:center;flex-shrink:0}
+.scr-stage > div:last-child{flex:1;display:flex;flex-direction:column;gap:3px}
+.scr-total{display:flex;justify-content:space-between;align-items:baseline;background:#F4F6F8;border-radius:8px;padding:8px 10px;margin-top:8px;font-weight:800}
+.scr-total b{font-size:18px}
+.scr-chip{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.c-g{background:#E3F1EA;color:#1D5E3F}.c-a{background:#FDF0DC;color:#8A4B08}.c-r{background:#FBE4E4;color:#9B1C1C}.c-b{background:#E4EDF6;color:#1F4E79}.c-n{background:#EDF0F3;color:#3B4A5A}
+.scr-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.scr-table th{text-align:left;color:#4A5A6B;font-size:11.5px;font-weight:700;padding:6px;border-bottom:1px solid #DCE3EA}
+.scr-table td{padding:8px 6px;border-bottom:1px solid #E6ECF1;vertical-align:middle}
+.scr-table tr.hl td{background:#FFF4E6}
+.scr-scroll{overflow-x:auto}
+.scr-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.scr-kpi b{display:block;font-size:22px;font-weight:800;margin-top:2px}
+.scr-list-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid #E6ECF1}
+.scr-list-row:first-of-type{border-top:0}
+.scr-list-row > div{flex:1;min-width:0}
+.scr-btn{display:inline-block;border:1px solid #1F4E79;color:#1F4E79;background:#FFFFFF;border-radius:8px;padding:4px 9px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.scr-full{display:flex;flex-direction:column;gap:12px;padding:14px}
+.scr-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.scr-head h3{margin:0;font-size:19px;font-weight:800}
+.scr-grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:12px;align-items:start}
+.scr-check{display:flex;gap:8px;align-items:center}
+.scr-dot{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;flex-shrink:0}
+.scr-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 10px}
+.scr-fields small{display:block;color:#4A5A6B;font-size:11px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:860px){.scr-grid{grid-template-columns:minmax(0,1fr)}.scr-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.ui-modal{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px));background:rgba(10,18,28,.6);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.ui-modal[hidden]{display:none}
+.ui-modal-card{width:min(1100px,100%);max-height:100%;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.ui-modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border)}
+.ui-modal-head h2{margin:0;font-size:17px;font-weight:800}
+.ui-modal-head p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+.ui-modal-body{overflow:auto;padding:12px}
 </style>
 </head>
 <body>
 <div id="stage" aria-label="3D model of a tax engine. Drag to rotate, scroll or pinch to zoom." role="img"></div>
 
 <header class="top">
-  <h1>How a tax engine and ECM work together</h1>
-  <p>Pick a flow below, then use Next and Back to walk through each step. Drag to look around.</p>
-  <div class="legend" aria-hidden="true">
-    <span><i style="background:var(--client)"></i>Company systems</span>
-    <span><i style="background:var(--engine)"></i>Tax engine gateway and services</span>
-    <span><i style="background:var(--data)"></i>Databases and cache</span>
-    <span><i style="background:var(--ecm)"></i>ECM</span>
-    <span><i style="background:var(--cust)"></i>Customer</span>
-    <span><i style="background:var(--post)"></i>After the sale</span>
+  <h1>How an Indirect Tax Engine and ECM Work Together</h1>
+  <div class="built-by">Built by Huy</div>
+  <p>Pick one of the two flows, then use Next and Back to walk through each step. Drag to look around.</p>
+  <div class="flowpick" id="flowpick" role="group" aria-labelledby="fpLabel">
+    <div class="fp-current">
+      <span>Viewing: <b id="fpName">Tax Calculation</b> Flow</span>
+      <button type="button" class="link-btn fp-switch" id="fpSwitch" aria-expanded="false">Switch Flow</button>
+    </div>
+    <div class="fp-label" id="fpLabel">Choose a Flow</div>
+    <div class="fp-btns">
+      <button type="button" class="fp-btn" data-flow="tax" aria-pressed="true"><b>1. Tax Calculation</b><span>Follow an Invoice</span></button>
+      <button type="button" class="fp-btn" data-flow="ecm" aria-pressed="false"><b>2. Exemption Certificates</b><span>Follow a Certificate</span></button>
+    </div>
+  </div>
+  <div class="legend" id="legend">
+    <span data-cat="client"><i style="background:var(--client)"></i>Company Systems</span>
+    <span data-cat="engine"><i style="background:var(--engine)"></i>Tax Engine</span>
+    <span data-cat="data"><i style="background:var(--data)"></i>Data</span>
+    <span data-cat="ecm"><i style="background:var(--ecm)"></i>ECM</span>
+    <span data-cat="customer"><i style="background:var(--cust)"></i>Customer</span>
+    <span data-cat="post"><i style="background:var(--post)"></i>After the Sale</span>
   </div>
 </header>
 
 <aside class="panel" id="panel" aria-live="polite">
   <div class="panel-head">
     <div class="step-no"><b id="pNum">1</b><span id="pOf">Step 1 of 13</span></div>
-    <button class="link-btn" id="collapseBtn" aria-expanded="true" aria-controls="panelBody">Hide details</button>
+    <button class="link-btn" id="collapseBtn" aria-expanded="true" aria-controls="panelBody">Hide Details</button>
   </div>
   <div class="progress" aria-hidden="true"><span id="prog"></span></div>
   <h2 id="pTitle"></h2>
   <div class="panel-body" id="panelBody">
-    <div class="where" id="pWhere"></div>
-    <p id="pDesc"></p>
-    <pre id="pCode"></pre>
-    <div class="note">Values are illustrative. Rates, rules, and exemption requirements vary by jurisdiction and date.</div>
+    <p id="pSummary" class="summary"></p>
+    <div id="pMore" class="more" hidden>
+      <div class="where" id="pWhere"></div>
+      <p id="pDesc"></p>
+      <pre id="pCode"></pre>
+      <div class="note">Values are illustrative. Rates, rules, and exemption requirements vary by jurisdiction and date.</div>
+    </div>
+    <button class="link-btn more-btn" id="moreBtn" type="button" aria-expanded="false" aria-controls="pMore">Show More Details</button>
+    <div class="ui-box" id="uiBox" hidden>
+      <div class="ui-label">What the User Sees</div>
+      <div id="uiPreview"></div>
+      <button class="btn ui-open" id="uiOpen" type="button">See the Full Screen</button>
+    </div>
   </div>
   <div class="panel-nav">
     <button class="btn" id="prevBtn" aria-label="Previous step">&larr; Back</button>
@@ -249,41 +371,48 @@ canvas{display:block}
 
 <nav class="controls" aria-label="Controls">
   <div class="row">
-    <div class="seg" role="group" aria-label="Choose a flow">
-      <button class="btn" data-flow="tax" aria-pressed="true">Tax calculation</button>
-      <button class="btn" data-flow="ecm" aria-pressed="false">Exemption certificates</button>
-    </div>
     <div class="bar-group">
-      <button class="btn" id="playBtn">&#9654; Play tour</button>
-      <button class="btn" id="speedBtn" title="Change tour speed">Speed: normal</button>
+      <button class="btn" id="playBtn">&#9654; Play Tour</button>
+      <button class="btn" id="speedBtn" title="Change tour speed" hidden>Speed: Normal</button>
     </div>
     <div class="bar-group">
       <button class="btn" id="resetBtn" title="Show the whole model">Overview</button>
       <button class="btn icon zoom-btn" id="zoomIn" aria-label="Zoom in">+</button>
       <button class="btn icon zoom-btn" id="zoomOut" aria-label="Zoom out">&minus;</button>
-      <button class="btn" id="followBtn" aria-pressed="true" title="Camera moves to each step">Camera follows</button>
+      <button class="btn" id="followBtn" aria-pressed="true" title="Camera moves to each step" hidden>Camera Follows</button>
       <button class="btn icon" id="helpBtn" aria-label="How to use this model">?</button>
     </div>
   </div>
-  <div class="rail" id="rail"></div>
+  <div class="rail" id="rail" hidden></div>
 </nav>
 
 <div class="tip" id="tip"></div>
 
+<div class="ui-modal" id="uiModal" hidden role="dialog" aria-modal="true" aria-labelledby="uiModalTitle">
+  <div class="ui-modal-card">
+    <div class="ui-modal-head">
+      <div><h2 id="uiModalTitle">Screen</h2><p>Mockup with sample data. The highlighted area is what this step affects.</p></div>
+      <button class="btn" id="uiClose" type="button">Close</button>
+    </div>
+    <div class="ui-modal-body" id="uiModalBody"></div>
+  </div>
+</div>
+
 <div class="intro" id="intro" role="dialog" aria-modal="true" aria-labelledby="introTitle">
   <div class="intro-card">
-    <h2 id="introTitle">See how a tax engine and ECM work</h2>
+    <h2 id="introTitle">See How an Indirect Tax Engine Works</h2>
+    <div class="callout">
+      <p class="callout-main">A sample of how I quickly turn an idea into a working project.</p>
+      <p class="callout-by">Built by Huy</p>
+    </div>
     <p>This model follows a sales invoice through a tax engine, and an exemption certificate through ECM. Each step explains what happens and shows sample data.</p>
-    <p class="sample">A sample of how I quickly turn an idea into a working project.</p>
-    <ul class="how">
-      <li><b>Next and Back</b>Walk through the steps at your own pace</li>
-      <li><b>Click a block</b>Jump straight to that step</li>
-      <li><b>Drag</b>Rotate the view (two fingers or right-drag to move)</li>
-      <li><b>Scroll or pinch</b>Zoom in and out</li>
-    </ul>
+    <div class="choose-title">Choose a Flow</div>
+    <div class="intro-choices">
+      <button type="button" class="choice" data-start="tax"><b>Tax Calculation</b><span>Follow an Invoice</span></button>
+      <button type="button" class="choice" data-start="ecm"><b>Exemption Certificates</b><span>Follow a Certificate</span></button>
+    </div>
     <div class="intro-actions">
-      <button class="btn primary" id="startTour">Start the guided tour</button>
-      <button class="btn" id="exploreBtn">Explore on my own</button>
+      <button class="link-btn intro-skip" id="exploreBtn" type="button">Explore on My Own</button>
     </div>
   </div>
 </div>
@@ -464,13 +593,37 @@ var ECM_STEPS = [
    code:'Audit sample: 250 exempt invoices\n  Valid certificate found: 250\n  Missing or invalid:        0\n  Potential assessment:  $0.00'}
 ];
 
-var FLOWS = { tax:{steps:TAX_STEPS}, ecm:{steps:ECM_STEPS} };
+var FLOWS = { tax:{steps:TAX_STEPS, name:"Tax Calculation"}, ecm:{steps:ECM_STEPS, name:"Exemption Certificates"} };
 var flowKey = "tax";
 var STEPS = TAX_STEPS;
 
 var DATA_LINKS = [["content","cache"],["cache","addr"],["cache","juris"],["cache","taxab"],["cache","rates"],["certs","exempt"],["txdb","calc"]];
 
 // ---------- Helpers ----------
+var allLabels = [];
+function sizeLabel(sp){
+  // sizeAttenuation:false keeps labels the same size on screen at any zoom
+  var h = window.innerHeight || 800;
+  var fovScale = 1 / Math.tan(THREE.MathUtils ? THREE.MathUtils.degToRad(22.5) : (22.5*Math.PI/180));
+  var sy = (sp.userData.px * 2) / (h * fovScale);
+  sp.scale.set(sy * sp.userData.aspect, sy, 1);
+}
+function tc(str){
+  var small = /^(a|an|the|and|but|or|nor|for|of|to|in|on|at|by|as|vs|via|from|with|per)$/;
+  var words = String(str).split(" ");
+  return words.map(function(w, i){
+    return w.split("-").map(function(part, j){
+      var m = part.match(/^([^A-Za-z0-9]*)([A-Za-z0-9].*)?$/);
+      if (!m || !m[2]) return part;
+      var pre = m[1], core = m[2];
+      if (/[A-Z]{2,}/.test(core) || /^[0-9]/.test(core)) return part;
+      var bare = core.toLowerCase().replace(/[^a-z]/g, "");
+      if (i > 0 && i < words.length - 1 && j === 0 && !pre && small.test(bare)) return pre + core.toLowerCase();
+      return pre + core.charAt(0).toUpperCase() + core.slice(1);
+    }).join("-");
+  }).join(" ");
+}
+
 function cssVar(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
 function catColor(cat){ return cssVar(CAT[cat]) || "#888"; }
 var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -542,10 +695,12 @@ function makeLabel(text, badgeText, badgeColor, big){
   ctx.fillText(text, x, h/2 + 2);
   var tex = new THREE.CanvasTexture(c);
   tex.minFilter = THREE.LinearFilter;
-  var mat = new THREE.SpriteMaterial({map:tex, transparent:true, depthTest:false});
+  var mat = new THREE.SpriteMaterial({map:tex, transparent:true, depthTest:false, sizeAttenuation:false});
   var s = new THREE.Sprite(mat);
-  var scale = big ? 0.024 : 0.024;
-  s.scale.set(c.width*scale, c.height*scale, 1);
+  s.userData.aspect = c.width / c.height;
+  s.userData.px = big ? 30 : 24;
+  allLabels.push(s);
+  sizeLabel(s);
   s.renderOrder = 10;
   return s;
 }
@@ -569,6 +724,7 @@ scene.add(world);
 var enclosure, engineLabel;
 
 function buildScene(){
+  allLabels = [];
   // clear
   while (world.children.length) world.remove(world.children[0]);
   pickables.length = 0;
@@ -576,6 +732,8 @@ function buildScene(){
 
   computeFirst();
   var inFlow = flowNodeSet();
+  var cats = {}; Object.keys(inFlow).forEach(function(id){ if (NODES[id]) cats[NODES[id].cat] = 1; });
+  document.querySelectorAll("#legend [data-cat]").forEach(function(el){ el.hidden = !cats[el.getAttribute("data-cat")]; });
   // Platform enclosures
   ENCLS.forEach(function(E){
     var eGeo = new THREE.BoxGeometry(E.w*SP, 4.2, E.d*SP);
@@ -590,7 +748,7 @@ function buildScene(){
     floor.rotation.x = -Math.PI/2;
     floor.position.set(E.cx*SP, 0.01, E.cz*SP);
     world.add(floor);
-    var lbl = makeLabel(E.label, null, catColor(E.cat), true);
+    var lbl = makeLabel(tc(E.label), null, catColor(E.cat), true);
     if (faded) lbl.material.opacity = 0.3;
     lbl.position.set(E.cx*SP, 5.2, (E.cz - E.d/2)*SP);
     world.add(lbl);
@@ -638,13 +796,13 @@ function buildScene(){
     g.add(ring);
     // label
     var fs = firstStep[id];
-    var label = makeLabel(n.label, fs !== undefined ? String(fs+1) : null, catColor(n.cat), false);
+    var label = makeLabel(tc(n.label), fs !== undefined ? String(fs+1) : null, catColor(n.cat), false);
     if (!inFlow[id]){ mat.transparent = true; mat.opacity = 0.14; label.visible = false; }
     label.position.set(0, n.size[1] + 1.0, 0);
     g.add(label);
 
     world.add(g);
-    nodeObjs[id] = {group:g, mesh:mesh, mat:mat, ring:ring, label:label, h:n.size[1]};
+    nodeObjs[id] = {group:g, mesh:mesh, mat:mat, ring:ring, label:label, h:n.size[1], inFlow:!!inFlow[id]};
   });
 
   // Data links (dashed)
@@ -846,15 +1004,143 @@ stage.addEventListener("pointermove", function(e){
   var hh = raycaster.intersectObjects(pickables, false);
   stage.style.cursor = hh.length ? "pointer" : "";
   if (hh.length){
-    var nid = hh[0].object.userData.id;
+    var nid = hh[0].object.userData.id; hoverId = nid;
     tip.innerHTML = "";
     tip.appendChild(document.createTextNode(NODES[nid].label));
     var sm = document.createElement("small"); sm.textContent = "Click to see this step"; tip.appendChild(sm);
     tip.style.left = e.clientX + "px"; tip.style.top = e.clientY + "px"; tip.style.display = "block";
-  } else { tip.style.display = "none"; }
+  } else { tip.style.display = "none"; hoverId = null; }
 });
-stage.addEventListener("pointerleave", function(){ tip.style.display = "none"; });
+var hoverId = null, showAllLabels = false;
+stage.addEventListener("pointerleave", function(){ tip.style.display = "none"; hoverId = null; });
 stage.addEventListener("pointerdown", function(){ tip.style.display = "none"; });
+
+
+// ---------- UI screens ----------
+(function(){
+  function find(list, fn){ for (var i=0;i<list.length;i++){ if (fn(list[i])) return list[i]; } return null; }
+  var st;
+  st = find(TAX_STEPS, function(s){ return s.at === "calc"; }); if (st) st.screen = {kind:"tx", focus:"breakdown"};
+  st = find(TAX_STEPS, function(s){ return s.at === "txdb"; }); if (st) st.screen = {kind:"tx", focus:"status"};
+  st = find(ECM_STEPS, function(s){ return s.at === "certs" && s.path && s.path[0] === "validate"; }); if (st) st.screen = {kind:"cert", focus:"detail"};
+  st = find(ECM_STEPS, function(s){ return s.at === "monitor"; }); if (st) st.screen = {kind:"cert", focus:"expiring"};
+  st = find(ECM_STEPS, function(s){ return s.at === "audit"; }); if (st) st.screen = {kind:"cert", focus:"risk"};
+})();
+
+function chipH(k, t){ return '<span class="scr-chip c-' + k + '">' + t + '</span>'; }
+function rowH(l, v, strong, color){ return '<div class="scr-row' + (strong ? ' strong' : '') + '"' + (color ? ' style="color:' + color + '"' : '') + '><span>' + l + '</span><span>' + v + '</span></div>'; }
+function card(inner, focus, extra){ return '<div class="scr-card' + (focus ? ' scr-focus' : '') + '"' + (extra ? ' style="' + extra + '"' : '') + '>' + (focus ? '<span class="scr-tag">This step</span>' : '') + inner + '</div>'; }
+function stageH(n, title, inner){ return '<div class="scr-stage"><div class="scr-num">' + n + '</div><div><h5>' + title + '</h5>' + inner + '</div></div>'; }
+
+var TX_ROWS = [
+  ["INV-10482","Customer Co.","State B","$1,040.00","$82.50",["g","Committed"]],
+  ["SO-20931","Customer Co.","State B","$1,000.00","$0.00",["b","Exempt"]],
+  ["INV-10477","Lakeside Hardware","State C","$2,300.00","$161.00",["a","Uncommitted"]],
+  ["INV-10469","Pioneer Farms","State C","$640.00","$12.80",["b","Partly exempt"]],
+  ["CM-00412","Summit Fabrication","State A","-$200.00","-$16.50",["n","Credit memo"]]
+];
+function txList(focus, rows){
+  var r = (rows || TX_ROWS).map(function(x, i){
+    return '<tr' + (focus && i === 0 ? ' class="hl"' : '') + '><td><span class="scr-mono">' + x[0] + '</span></td><td><b>' + x[1] + '</b></td><td>' + x[2] + '</td><td>' + x[3] + '</td><td>' + x[4] + '</td><td>' + chipH(x[5][0], x[5][1]) + '</td></tr>';
+  }).join("");
+  return card('<h4>Recent Documents</h4><div class="scr-scroll"><table class="scr-table"><thead><tr><th scope="col">Document</th><th scope="col">Customer</th><th scope="col">Ship to</th><th scope="col">Amount</th><th scope="col">Tax</th><th scope="col">Status</th></tr></thead><tbody>' + r + '</tbody></table></div>', focus);
+}
+function txBreakdown(focus){
+  return card(
+    '<div class="scr-muted" style="font-size:11.5px;font-weight:700">Why This Tax Was Charged</div>' +
+    '<h4 style="margin:2px 0 6px"><span class="scr-mono" style="font-size:14px">INV-10482</span></h4>' +
+    stageH(1, "Location and Jurisdictions", rowH("Ship to", "State B") + rowH("Jurisdictions", "4 found")) +
+    stageH(2, "Exemption Check", rowH("Certificate for State B", "None") + rowH("Result", "Not exempt")) +
+    stageH(3, "Pre-Tax Rules", rowH("Invoice total", "$1,040.00") + rowH("Freight exclusion", "-$40.00") + rowH("Taxable base", "$1,000.00", true)) +
+    stageH(4, "Tax by Jurisdiction", rowH("State B, 5.00%", "$50.00") + rowH("County X, 1.00%", "$10.00") + rowH("City Y, 2.00%", "$20.00") + rowH("Transit Z, 0.25%", "$2.50")) +
+    stageH(5, "Post-Tax Rules", rowH("Caps and holidays", "None") + rowH("Rounding", "No change")) +
+    '<div class="scr-total"><span>Total Tax</span><b>$82.50</b></div>', focus);
+}
+function txScreen(focus){
+  return '<div class="scr scr-full"><div class="scr-head"><h3>Transactions</h3><span class="scr-muted">Last 30 days</span></div>' +
+    '<div class="scr-grid">' + txList(focus === "status") + txBreakdown(focus === "breakdown") + '</div></div>';
+}
+
+function certKpis(focus){
+  var k = function(l, v, sub, c){ return '<div class="scr-card scr-kpi"><div class="scr-muted" style="font-size:11.5px;font-weight:700">' + l + '</div><b' + (c ? ' style="color:' + c + '"' : '') + '>' + v + '</b><div class="scr-muted" style="font-size:11.5px">' + sub + '</div></div>'; };
+  var inner = k("Exempt sales covered", "97.5%", "Valid certificate on file") + k("Valid certificates", "4,690", "+212 this month") +
+    k("Expiring in 90 days", "68", "38, 21, and 9 at 90/60/30 days", "#8A4B08") + k("Missing or invalid", "122", "From last bulk import", "#9B1C1C");
+  if (!focus) return '<div class="scr-kpis">' + inner + '</div>';
+  return '<div class="scr-card scr-focus" style="background:transparent;border:0;padding:0"><span class="scr-tag">This step</span><div class="scr-kpis">' + inner + '</div></div>';
+}
+function certRisk(focus){
+  var r = function(n, d, a, b){ return '<div class="scr-list-row"><div><b>' + n + '</b><div class="scr-muted" style="font-size:11.5px">' + d + '</div></div><b>' + a + '</b><span class="scr-btn">' + b + '</span></div>'; };
+  return card('<div class="scr-row" style="align-items:center;margin-bottom:6px"><h4 style="margin:0">Exempt Sales Without a Valid Certificate</h4>' + chipH("r", "$48,210 at risk") + '</div>' +
+    r("Lakeside Hardware", "Resale, certificate expired", "$21,400", "Send renewal") +
+    r("Harbor Medical Group", "Nonprofit, no certificate", "$15,860", "Request") +
+    r("Summit Fabrication", "Manufacturing, wrong form", "$10,950", "Review"), focus);
+}
+function certTable(focus){
+  var rows = [
+    ["CERT-55190","Customer Co.","State B","Resale","Sep 29, 2029",["g","Valid"]],
+    ["CERT-55031","Brightline Schools","State A","Education","Oct 21, 2026",["a","Expires in 21 days"]],
+    ["CERT-55148","Pioneer Farms","State C","Agriculture","Dec 15, 2026",["a","Expires in 76 days"]],
+    ["CERT-54877","Lakeside Hardware","State C","Resale","Sep 12, 2026",["r","Expired"]]
+  ];
+  var r = rows.map(function(x){
+    var hl = (focus === "expiring" && x[5][0] === "a") || (focus === "detail" && x[0] === "CERT-55190");
+    return '<tr' + (hl ? ' class="hl"' : '') + '><td><span class="scr-mono">' + x[0] + '</span></td><td><b>' + x[1] + '</b></td><td>' + x[2] + '</td><td>' + x[3] + '</td><td>' + x[4] + '</td><td>' + chipH(x[5][0], x[5][1]) + '</td></tr>';
+  }).join("");
+  return card('<h4>Certificates</h4><div class="scr-scroll"><table class="scr-table"><thead><tr><th scope="col">Certificate</th><th scope="col">Customer</th><th scope="col">State</th><th scope="col">Reason</th><th scope="col">Expires</th><th scope="col">Status</th></tr></thead><tbody>' + r + '</tbody></table></div>', false);
+}
+function certDetail(focus){
+  var ok = function(t){ return '<div class="scr-check"><span class="scr-dot c-g" aria-hidden="true">&#10003;</span><span>' + t + '</span><span class="sr-only">passed</span></div>'; };
+  return card(
+    '<div class="scr-muted" style="font-size:11.5px;font-weight:700">Certificate Detail</div>' +
+    '<h4 style="margin:2px 0 2px"><span class="scr-mono" style="font-size:14px">CERT-55190</span></h4>' +
+    '<div class="scr-muted" style="margin-bottom:8px">Customer Co., State B &nbsp;' + chipH("g", "Valid") + '</div>' +
+    '<h5 style="margin-bottom:4px">Extracted Fields</h5><div class="scr-fields" style="margin-bottom:8px">' +
+      '<div><small>Exempt reason</small><b>Resale (use-based)</b></div><div><small>Permit number</small><b>B-448210</b></div>' +
+      '<div><small>Signed</small><b>Sep 29, 2026</b></div><div><small>Expires</small><b>Sep 29, 2029</b></div></div>' +
+    '<h5 style="margin-bottom:4px">Validation</h5><div style="display:flex;flex-direction:column;gap:3px;margin-bottom:8px">' +
+      ok("Correct state form") + ok("Reason allowed in state") + ok("Required fields present") + ok("Signature present") + ok("Not expired") + '</div>' +
+    '<div class="scr-total" style="font-weight:600"><span>Linked to account <b style="font-size:13px">C-2231</b></span></div>', focus);
+}
+function certExpiringPreview(){
+  return card('<div class="scr-row" style="align-items:center;margin-bottom:6px"><h4 style="margin:0">Expiring in 90 Days</h4><b style="font-size:18px;color:#8A4B08">68</b></div>' +
+    rowH("Within 30 days", "9") + rowH("Within 60 days", "21") + rowH("Within 90 days", "38") +
+    '<div style="margin-top:8px">' +
+    '<div class="scr-list-row"><div><b>Brightline Schools</b><div class="scr-muted" style="font-size:11.5px">CERT-55031, expires in 21 days</div></div><span class="scr-btn">Send renewal</span></div>' +
+    '<div class="scr-list-row"><div><b>Pioneer Farms</b><div class="scr-muted" style="font-size:11.5px">CERT-55148, expires in 76 days</div></div><span class="scr-btn">Send renewal</span></div></div>', true);
+}
+function certScreen(focus){
+  return '<div class="scr scr-full"><div class="scr-head"><h3>Certificate Dashboard</h3><span class="scr-muted">Sample data</span></div>' +
+    certKpis(focus === "expiring") +
+    '<div class="scr-grid"><div style="display:flex;flex-direction:column;gap:12px;min-width:0">' + certRisk(focus === "risk") + certTable(focus) + '</div>' + certDetail(focus === "detail") + '</div></div>';
+}
+function screenPreview(sc){
+  if (sc.kind === "tx") return '<div class="scr">' + (sc.focus === "breakdown" ? txBreakdown(true) : txList(true, TX_ROWS.slice(0,3))) + '</div>';
+  if (sc.focus === "detail") return '<div class="scr">' + certDetail(true) + '</div>';
+  if (sc.focus === "expiring") return '<div class="scr">' + certExpiringPreview() + '</div>';
+  return '<div class="scr" style="display:flex;flex-direction:column;gap:10px">' + certRisk(true) + '</div>';
+}
+function screenTitle(sc){ return sc.kind === "tx" ? "Transaction Explorer" : "Certificate Dashboard"; }
+
+var uiBox = document.getElementById("uiBox"), uiPreview = document.getElementById("uiPreview");
+var uiModal = document.getElementById("uiModal"), uiModalBody = document.getElementById("uiModalBody"), uiOpenBtn = document.getElementById("uiOpen");
+function renderUI(s){
+  if (!s.screen){ uiBox.hidden = true; uiPreview.innerHTML = ""; return; }
+  uiBox.hidden = false;
+  uiPreview.innerHTML = screenPreview(s.screen);
+  uiOpenBtn.textContent = "See the Full " + screenTitle(s.screen);
+}
+function openUI(){
+  var s = STEPS[current]; if (!s.screen) return;
+  document.getElementById("uiModalTitle").textContent = screenTitle(s.screen);
+  uiModalBody.innerHTML = s.screen.kind === "tx" ? txScreen(s.screen.focus) : certScreen(s.screen.focus);
+  if (playing){ playing = false; syncPlay(); }
+  uiModal.hidden = false;
+  document.getElementById("uiClose").focus();
+}
+function closeUI(){ uiModal.hidden = true; uiOpenBtn.focus(); }
+uiOpenBtn.addEventListener("click", openUI);
+document.getElementById("uiClose").addEventListener("click", closeUI);
+uiModal.addEventListener("click", function(e){ if (e.target === uiModal) closeUI(); });
 
 // ---------- Playback ----------
 var current = 0, stepStart = 0, playing = false, follow = true;
@@ -874,18 +1160,31 @@ function buildChips(){
     var b = document.createElement("button");
     b.className = "chip"; b.type = "button";
     b.innerHTML = '<b>' + (i+1) + '</b><span></span>';
-    b.querySelector("span").textContent = s.chip || (s.at === "erp" ? (i > 0 ? "Back to ERP" : "ERP") : NODES[s.at].label);
+    b.querySelector("span").textContent = tc(s.chip || (s.at === "erp" ? (i > 0 ? "Back to ERP" : "ERP") : NODES[s.at].label));
     b.addEventListener("click", function(){ goTo(i, true); });
     rail.appendChild(b); chips.push(b);
   });
 }
+var flowpickEl = document.getElementById("flowpick"), fpSwitch = document.getElementById("fpSwitch");
+function collapsePicker(){
+  flowpickEl.classList.add("collapsed"); fpSwitch.setAttribute("aria-expanded", "false");
+  document.querySelector(".top").classList.add("started");
+}
+fpSwitch.addEventListener("click", function(){
+  flowpickEl.classList.remove("collapsed"); fpSwitch.setAttribute("aria-expanded", "true");
+  var b = flowpickEl.querySelector('.fp-btn[aria-pressed="false"]'); if (b) b.focus();
+});
 function setFlow(key){
   flowKey = key; STEPS = FLOWS[key].steps;
+  document.getElementById("fpName").textContent = FLOWS[key].name;
   document.querySelectorAll("[data-flow]").forEach(function(btn){ btn.setAttribute("aria-pressed", String(btn.getAttribute("data-flow") === key)); });
   buildScene(); buildChips(); current = 0;
 }
 document.querySelectorAll("[data-flow]").forEach(function(btn){
-  btn.addEventListener("click", function(){ if (btn.getAttribute("data-flow") !== flowKey){ setFlow(btn.getAttribute("data-flow")); goTo(0, true); } });
+  btn.addEventListener("click", function(){
+    if (btn.getAttribute("data-flow") !== flowKey){ setFlow(btn.getAttribute("data-flow")); goTo(0, true); }
+    collapsePicker(); fpSwitch.focus();
+  });
 });
 buildChips();
 function paintChips(){
@@ -899,23 +1198,34 @@ function paintChips(){
 }
 
 function goTo(i, userInitiated){
+  showAllLabels = false;
   current = (i + STEPS.length) % STEPS.length;
   stepStart = performance.now()/1000;
   var s = STEPS[current];
   panel.num.textContent = current+1;
   panel.num.style.background = catColor(NODES[s.at].cat);
-  panel.of.textContent = "Step " + (current+1) + " of " + STEPS.length;
+  panel.of.innerHTML = "";
+  var fnm = document.createElement("span"); fnm.className = "flow-name"; fnm.textContent = FLOWS[flowKey].name + " Flow";
+  panel.of.appendChild(fnm);
+  panel.of.appendChild(document.createTextNode(", Step " + (current+1) + " of " + STEPS.length));
+  var nb = document.getElementById("nextBtn");
+  if (current === STEPS.length - 1){ nb.innerHTML = "Try the " + FLOWS[flowKey === "tax" ? "ecm" : "tax"].name + " Flow &rarr;"; }
+  else { nb.innerHTML = "Next &rarr;"; }
   document.getElementById("prog").style.width = ((current+1)/STEPS.length*100) + "%";
   if (userInitiated && playing){ playing = false; syncPlay(); }
-  panel.title.textContent = s.title;
+  panel.title.textContent = tc(s.title);
   panel.where.textContent = s.where;
-  panel.desc.textContent = s.desc;
+  var sentences = s.desc.match(/.+?[.!?](?=\s+|$)/g) || [s.desc];
+  document.getElementById("pSummary").textContent = sentences[0].trim();
+  panel.desc.textContent = sentences.slice(1).join("").trim();
+  panel.desc.hidden = sentences.length < 2;
   panel.code.textContent = s.code;
+  renderUI(s);
   paintChips();
   var c = packetGlow.material.color; c.set(kindColor(s.kind));
   trail.forEach(function(t){ t.material.color.set(kindColor(s.kind)); });
-  if (chips[current].scrollIntoView) chips[current].scrollIntoView({block:"nearest", inline:"center", behavior: reduceMotion ? "auto" : "smooth"});
-  if (userInitiated && !follow){ /* keep user's view */ }
+  // moving to a step always brings the camera back to it
+  if (userInitiated && !follow){ follow = true; syncFollow(); }
   if (follow) focusStep();
 }
 function focusStep(){
@@ -934,35 +1244,52 @@ function focusStep(){
 
 var playBtn = document.getElementById("playBtn");
 var followBtn = document.getElementById("followBtn");
-function syncPlay(){ playBtn.innerHTML = playing ? "&#10074;&#10074; Pause tour" : "&#9654; Play tour"; playBtn.classList.toggle("primary", playing); }
+function syncPlay(){ playBtn.innerHTML = playing ? "&#10074;&#10074; Pause Tour" : "&#9654; Play Tour"; playBtn.classList.toggle("primary", playing); }
 function syncFollow(){ followBtn.setAttribute("aria-pressed", String(follow)); }
 playBtn.addEventListener("click", function(){ playing = !playing; if (playing) stepStart = performance.now()/1000 - (STEPS[current].path ? 0 : 0); syncPlay(); });
-document.getElementById("nextBtn").addEventListener("click", function(){ goTo(current+1, true); });
+document.getElementById("nextBtn").addEventListener("click", function(){
+  if (current === STEPS.length - 1){ setFlow(flowKey === "tax" ? "ecm" : "tax"); goTo(0, true); }
+  else goTo(current+1, true);
+});
 document.getElementById("prevBtn").addEventListener("click", function(){ goTo(current-1, true); });
 followBtn.addEventListener("click", function(){ follow = !follow; syncFollow(); if (follow) focusStep(); });
-document.getElementById("resetBtn").addEventListener("click", function(){ follow = false; syncFollow(); resetView(); });
+document.getElementById("resetBtn").addEventListener("click", function(){ follow = false; syncFollow(); resetView(); showAllLabels = true; });
 document.getElementById("zoomIn").addEventListener("click", function(){ cam.goalRadius = clamp(cam.goalRadius*0.8, 8, 110); });
 document.getElementById("zoomOut").addEventListener("click", function(){ cam.goalRadius = clamp(cam.goalRadius*1.25, 8, 220); });
 var speedBtn = document.getElementById("speedBtn");
 speedBtn.addEventListener("click", function(){
   speed = speed === "normal" ? "slow" : "normal";
   TRAVEL = SPEEDS[speed][0]; DWELL = SPEEDS[speed][1];
-  speedBtn.textContent = "Speed: " + speed;
+  speedBtn.textContent = "Speed: " + tc(speed);
 });
 var collapseBtn = document.getElementById("collapseBtn"), panelEl = document.getElementById("panel");
 collapseBtn.addEventListener("click", function(){
   var c = panelEl.classList.toggle("collapsed");
-  collapseBtn.textContent = c ? "Show details" : "Hide details";
+  collapseBtn.textContent = c ? "Show Details" : "Hide Details";
   collapseBtn.setAttribute("aria-expanded", String(!c));
+});
+var moreBtn = document.getElementById("moreBtn"), moreEl = document.getElementById("pMore");
+moreBtn.addEventListener("click", function(){
+  var open = moreEl.hidden;
+  moreEl.hidden = !open;
+  moreBtn.textContent = open ? "Show Less" : "Show More Details";
+  moreBtn.setAttribute("aria-expanded", String(open));
 });
 var intro = document.getElementById("intro");
 function closeIntro(){ intro.hidden = true; }
-document.getElementById("startTour").addEventListener("click", function(){
-  closeIntro(); follow = true; syncFollow(); goTo(0, false); playing = true; stepStart = performance.now()/1000; syncPlay();
+document.querySelectorAll("[data-start]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    closeIntro();
+    var k = btn.getAttribute("data-start");
+    if (k !== flowKey) setFlow(k);
+    collapsePicker();
+    follow = true; syncFollow(); goTo(0, false); playing = true; stepStart = performance.now()/1000; syncPlay();
+  });
 });
 document.getElementById("exploreBtn").addEventListener("click", function(){ closeIntro(); playing = false; syncPlay(); });
-document.getElementById("helpBtn").addEventListener("click", function(){ intro.hidden = false; document.getElementById("startTour").focus(); });
+document.getElementById("helpBtn").addEventListener("click", function(){ intro.hidden = false; document.querySelector("[data-start]").focus(); });
 window.addEventListener("keydown", function(e){
+  if (!uiModal.hidden){ if (e.key === "Escape") closeUI(); return; }
   if (e.key === "Escape" && !intro.hidden){ closeIntro(); return; }
   if (!intro.hidden) return;
   if (e.target.tagName === "BUTTON" && (e.key === " " || e.key === "Enter")) return;
@@ -1002,6 +1329,14 @@ function frame(){
     packet.position.lerp(new THREE.Vector3(p2.x, nodeObjs[s.at].h + 0.55 + bob, p2.z), 0.2);
   }
 
+  // labels: only the blocks in this step (plus the hovered one) to keep the scene calm
+  var rel = {}; rel[s.at] = 1; (s.path||[]).forEach(function(x){ rel[x] = 1; }); (s.uses||[]).forEach(function(x){ rel[x] = 1; });
+  if (showAllLabels) rel = null;
+  Object.keys(nodeObjs).forEach(function(id){
+    var o = nodeObjs[id];
+    if (!o.inFlow){ o.label.visible = id === hoverId; return; }
+    o.label.visible = !rel || !!rel[id] || id === hoverId;
+  });
   // node highlight
   Object.keys(nodeObjs).forEach(function(id){
     var o = nodeObjs[id];
@@ -1037,6 +1372,7 @@ function frame(){
 
 // ---------- Resize and theme ----------
 function resize(){
+  allLabels.forEach(sizeLabel);
   var w = window.innerWidth, h = window.innerHeight;
   renderer.setSize(w, h);
   camera.aspect = w/h;
@@ -1068,8 +1404,8 @@ function start(){
   goTo(0, false);
   resetView();
   cam.target.copy(cam.goal); cam.radius = cam.goalRadius;
-  if (window.innerWidth < 760){ panelEl.classList.add("collapsed"); collapseBtn.textContent = "Show details"; collapseBtn.setAttribute("aria-expanded","false"); }
-  document.getElementById("startTour").focus();
+  if (window.innerWidth < 760){ panelEl.classList.add("collapsed"); collapseBtn.textContent = "Show Details"; collapseBtn.setAttribute("aria-expanded","false"); }
+  document.querySelector("[data-start]").focus();
   requestAnimationFrame(frame);
 }
 if (document.fonts && document.fonts.ready){
