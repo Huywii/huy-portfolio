@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tax engine and ECM in 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --scene:#e7edf3;
+  --grid:#b9c6d3;
+  --panel:rgba(255,255,255,.92);
+  --text:#15212e;
+  --muted:#556575;
+  --border:#cdd7e1;
+  --chip:#ffffff;
+  --chip-active:#15212e;
+  --chip-active-text:#ffffff;
+  --code:#eef2f6;
+  --client:#3f73d9;
+  --engine:#7a62d6;
+  --data:#1f9a88;
+  --post:#d27a22;
+  --cust:#c94f74;
+  --ecm:#4f8a2a;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --scene:#142130;
+    --grid:#2b3d51;
+    --panel:rgba(22,34,48,.92);
+    --text:#e8eef5;
+    --muted:#97a8ba;
+    --border:#2e4257;
+    --chip:#1c2b3c;
+    --chip-active:#e8eef5;
+    --chip-active-text:#142130;
+    --code:#0f1a26;
+    --client:#6b9bf5;
+    --engine:#a08ef0;
+    --data:#3cc7b2;
+    --post:#f0a24e;
+    --cust:#ec7aa0;
+    --ecm:#8cc45c;
+  }
+}
+:root[data-theme="dark"]{
+  --scene:#142130;
+  --grid:#2b3d51;
+  --panel:rgba(22,34,48,.92);
+  --text:#e8eef5;
+  --muted:#97a8ba;
+  --border:#2e4257;
+  --chip:#1c2b3c;
+  --chip-active:#e8eef5;
+  --chip-active-text:#142130;
+  --code:#0f1a26;
+  --client:#6b9bf5;
+  --engine:#a08ef0;
+  --data:#3cc7b2;
+  --post:#f0a24e;
+  --cust:#ec7aa0;
+  --ecm:#8cc45c;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0;height:100%;overflow:hidden;
+  background:var(--scene);color:var(--text);
+  font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:15px;line-height:1.5;
+}
+#stage{position:fixed;inset:0;touch-action:none;cursor:grab}
+#stage.dragging{cursor:grabbing}
+canvas{display:block}
+
+.top{
+  position:fixed;left:16px;top:calc(14px + env(safe-area-inset-top,0px));
+  max-width:min(430px,calc(100% - 32px));pointer-events:none;
+}
+.top h1{margin:0;font-size:22px;line-height:1.2;font-weight:800;letter-spacing:-.01em}
+.top p{margin:4px 0 0;color:var(--muted);font-size:13.5px}
+
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+.panel{
+  position:fixed;right:16px;top:calc(14px + env(safe-area-inset-top,0px));
+  width:360px;max-height:calc(100% - 150px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
+  overflow:auto;background:var(--panel);border:1px solid var(--border);
+  border-radius:14px;padding:16px 18px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.step-no{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);font-weight:600}
+.step-no b{
+  display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;
+  color:#fff;font-size:13px;font-variant-numeric:tabular-nums;
+}
+.panel h2{margin:8px 0 6px;font-size:19px;line-height:1.25;font-weight:800}
+.panel p{margin:0 0 10px;font-size:14px}
+.panel .where{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.panel pre{
+  margin:0;background:var(--code);border:1px solid var(--border);border-radius:8px;
+  padding:10px 12px;font-size:12px;line-height:1.45;overflow-x:auto;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+.panel .note{font-size:12px;color:var(--muted);margin-top:8px}
+
+.controls{
+  position:fixed;left:50%;transform:translateX(-50%);
+  bottom:calc(12px + env(safe-area-inset-bottom,0px));
+  width:min(980px,calc(100% - 24px));
+  background:var(--panel);border:1px solid var(--border);border-radius:14px;
+  padding:10px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.btn{
+  font:inherit;font-size:13.5px;font-weight:700;color:var(--text);
+  background:var(--chip);border:1px solid var(--border);border-radius:9px;
+  padding:7px 12px;cursor:pointer;
+}
+.btn:hover{border-color:var(--muted)}
+.btn:focus-visible,.chip:focus-visible{outline:2px solid var(--client);outline-offset:2px}
+.btn.primary{background:var(--chip-active);color:var(--chip-active-text);border-color:var(--chip-active)}
+.btn[aria-pressed="true"]{border-color:var(--client);color:var(--client)}
+.seg{display:inline-flex;gap:4px;padding-right:6px;margin-right:2px;border-right:1px solid var(--border)}
+.hint{margin-left:auto;font-size:12px;color:var(--muted)}
+.rail{display:flex;gap:6px;overflow-x:auto;margin-top:10px;padding-bottom:2px;scrollbar-width:thin}
+.chip{
+  flex:0 0 auto;font:inherit;font-size:12.5px;font-weight:600;color:var(--text);
+  background:var(--chip);border:1px solid var(--border);border-radius:999px;
+  padding:5px 11px 5px 5px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+}
+.chip b{
+  display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;
+  font-size:11.5px;color:#fff;font-variant-numeric:tabular-nums;
+}
+.chip.active{background:var(--chip-active);color:var(--chip-active-text);border-color:var(--chip-active)}
+.chip.done{opacity:.72}
+
+.error{position:fixed;inset:0;display:none;place-items:center;padding:24px;text-align:center}
+
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.link-btn{font:inherit;font-size:12.5px;font-weight:700;color:var(--muted);background:none;border:0;cursor:pointer;padding:4px 6px;border-radius:6px}
+.link-btn:hover{color:var(--text)}
+.progress{height:5px;border-radius:99px;background:var(--border);margin:10px 0 2px;overflow:hidden}
+.progress span{display:block;height:100%;width:0;background:var(--client);border-radius:99px;transition:width .35s ease}
+.panel-nav{display:flex;gap:8px;margin-top:12px}
+.panel-nav .btn{flex:1;padding:10px 12px;font-size:14.5px}
+.panel.collapsed .panel-body{display:none}
+.seg .btn{font-size:14px;padding:8px 14px}
+.seg .btn[aria-pressed="true"]{background:var(--chip-active);color:var(--chip-active-text);border-color:var(--chip-active)}
+.bar-group{display:inline-flex;gap:6px;align-items:center}
+.icon{min-width:36px;text-align:center}
+
+.tip{position:fixed;pointer-events:none;z-index:5;background:rgba(17,27,39,.92);color:#fff;font-size:12.5px;font-weight:600;padding:6px 10px;border-radius:8px;transform:translate(12px,12px);display:none;max-width:240px}
+.tip small{display:block;font-weight:500;opacity:.75}
+
+.intro{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:rgba(10,18,28,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.intro[hidden]{display:none}
+.intro-card{width:min(520px,100%);max-height:100%;overflow:auto;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:22px 24px}
+.intro-card h2{margin:0 0 8px;font-size:22px;line-height:1.2;font-weight:800}
+.intro-card p{margin:0 0 14px;color:var(--muted)}
+.how{list-style:none;margin:0 0 18px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.how li{background:var(--code);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:13.5px}
+.how b{display:block;font-size:14px}
+.intro-actions{display:flex;gap:8px;flex-wrap:wrap}
+.intro-card p.sample{font-style:italic;color:var(--text);margin:-4px 0 16px}
+.intro-card p.desc{color:var(--text);font-size:14.5px;margin:0 0 10px}
+.intro-card p.sig{color:var(--muted);font-size:13px;font-weight:600;margin:0 0 14px}
+.intro-card h3{margin:0 0 8px;font-size:15px;font-weight:800}
+.how-title{border-top:1px solid var(--border);padding-top:12px}
+.intro-actions .btn{padding:11px 16px;font-size:15px}
+
+@media (max-width:760px){
+  .top h1{font-size:18px}
+  .top p{display:none}
+  .legend{margin-top:6px}
+  .panel{
+    left:12px;right:12px;width:auto;top:auto;
+    bottom:calc(128px + env(safe-area-inset-bottom,0px));
+    max-height:34vh;padding:12px 14px;
+  }
+  .panel h2{font-size:16.5px}
+  .panel pre{font-size:11px}
+  .hint,.zoom-btn,.legend,.rail,#speedBtn,#followBtn{display:none}
+  .top{left:12px;top:calc(10px + env(safe-area-inset-top,0px))}
+  .top h1{font-size:16px}
+  .controls{padding:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:calc(100% - 16px)}
+  .row{gap:6px}
+  .seg{display:flex;width:100%;border-right:0;padding:0;margin:0}
+  .seg .btn{flex:1;font-size:13px;padding:10px 6px;min-height:42px}
+  .bar-group{flex:1;display:flex}
+  .bar-group .btn{flex:1;min-height:42px}
+  .panel{left:8px;right:8px;bottom:calc(118px + env(safe-area-inset-bottom,0px));max-height:40vh}
+  .panel-nav .btn{min-height:44px}
+  .how{grid-template-columns:1fr}
+  .intro-card{padding:18px}
+  .intro-card h2{font-size:19px}
+}
+@media (max-height:520px) and (min-width:761px){
+  .top p,.legend,.rail,.hint{display:none}
+  .panel{width:300px;max-height:calc(100% - 90px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));padding:10px 12px}
+  .panel h2{font-size:15.5px}
+  .controls{padding:6px}
+}
+@media (prefers-reduced-motion:reduce){ .chip,.btn{transition:none} }
+</style>
+</head>
+<body>
+<div id="stage" aria-label="3D model of a tax engine. Drag to rotate, scroll or pinch to zoom." role="img"></div>
+
+<header class="top">
+  <h1>How a tax engine and ECM work together</h1>
+  <p>Pick a flow below, then use Next and Back to walk through each step. Drag to look around.</p>
+  <div class="legend" aria-hidden="true">
+    <span><i style="background:var(--client)"></i>Company systems</span>
+    <span><i style="background:var(--engine)"></i>Tax engine gateway and services</span>
+    <span><i style="background:var(--data)"></i>Databases and cache</span>
+    <span><i style="background:var(--ecm)"></i>ECM</span>
+    <span><i style="background:var(--cust)"></i>Customer</span>
+    <span><i style="background:var(--post)"></i>After the sale</span>
+  </div>
+</header>
+
+<aside class="panel" id="panel" aria-live="polite">
+  <div class="panel-head">
+    <div class="step-no"><b id="pNum">1</b><span id="pOf">Step 1 of 13</span></div>
+    <button class="link-btn" id="collapseBtn" aria-expanded="true" aria-controls="panelBody">Hide details</button>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="prog"></span></div>
+  <h2 id="pTitle"></h2>
+  <div class="panel-body" id="panelBody">
+    <div class="where" id="pWhere"></div>
+    <p id="pDesc"></p>
+    <pre id="pCode"></pre>
+    <div class="note">Values are illustrative. Rates, rules, and exemption requirements vary by jurisdiction and date.</div>
+  </div>
+  <div class="panel-nav">
+    <button class="btn" id="prevBtn" aria-label="Previous step">&larr; Back</button>
+    <button class="btn primary" id="nextBtn" aria-label="Next step">Next &rarr;</button>
+  </div>
+</aside>
+
+<nav class="controls" aria-label="Controls">
+  <div class="row">
+    <div class="seg" role="group" aria-label="Choose a flow">
+      <button class="btn" data-flow="tax" aria-pressed="true">Tax calculation</button>
+      <button class="btn" data-flow="ecm" aria-pressed="false">Exemption certificates</button>
+    </div>
+    <div class="bar-group">
+      <button class="btn" id="playBtn">&#9654; Play tour</button>
+      <button class="btn" id="speedBtn" title="Change tour speed">Speed: normal</button>
+    </div>
+    <div class="bar-group">
+      <button class="btn" id="resetBtn" title="Show the whole model">Overview</button>
+      <button class="btn icon zoom-btn" id="zoomIn" aria-label="Zoom in">+</button>
+      <button class="btn icon zoom-btn" id="zoomOut" aria-label="Zoom out">&minus;</button>
+      <button class="btn" id="followBtn" aria-pressed="true" title="Camera moves to each step">Camera follows</button>
+      <button class="btn icon" id="helpBtn" aria-label="How to use this model">?</button>
+    </div>
+  </div>
+  <div class="rail" id="rail"></div>
+</nav>
+
+<div class="tip" id="tip"></div>
+
+<div class="intro" id="intro" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+  <div class="intro-card">
+    <h2 id="introTitle">See how a tax engine and ECM work</h2>
+    <p>This model follows a sales invoice through a tax engine, and an exemption certificate through ECM. Each step explains what happens and shows sample data.</p>
+    <p class="sample">A sample of how I quickly turn an idea into a working project.</p>
+    <ul class="how">
+      <li><b>Next and Back</b>Walk through the steps at your own pace</li>
+      <li><b>Click a block</b>Jump straight to that step</li>
+      <li><b>Drag</b>Rotate the view (two fingers or right-drag to move)</li>
+      <li><b>Scroll or pinch</b>Zoom in and out</li>
+    </ul>
+    <div class="intro-actions">
+      <button class="btn primary" id="startTour">Start the guided tour</button>
+      <button class="btn" id="exploreBtn">Explore on my own</button>
+    </div>
+  </div>
+</div>
+
+<div class="error" id="err">The 3D view couldn't start because this browser has WebGL turned off. Try another browser or enable hardware acceleration.</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+"use strict";
+
+// ---------- Content ----------
+var CAT = { client:"--client", engine:"--engine", data:"--data", post:"--post", customer:"--cust", ecm:"--ecm" };
+var SP = 1.5; // spacing multiplier between blocks
+var ENCLS = [
+  {label:"Tax engine platform", cat:"engine", cx:3.2, cz:0,    w:22.8, d:15},
+  {label:"ECM platform",        cat:"ecm",    cx:1,   cz:20.5, w:18,   d:9}
+];
+
+var NODES = {
+  erp:      {label:"ERP (Acumatica, D365, NetSuite)",                    cat:"client",   pos:[-19.5,0,0],  size:[3.4,2.4,2.8]},
+  conn:     {label:"Tax connector",          cat:"client",   pos:[-13,0,0],    size:[2.8,1.4,2.2]},
+  gateway:  {label:"API gateway",            cat:"engine",   pos:[-6.4,0,0],   size:[2.4,2.0,3.4]},
+  addr:     {label:"Address service",        cat:"engine",   pos:[-2,0,-2.6],  size:[2.8,1.3,2]},
+  juris:    {label:"Jurisdiction service",   cat:"engine",   pos:[2.6,0,-2.6], size:[2.8,1.3,2]},
+  nexus:    {label:"Nexus service",          cat:"engine",   pos:[7.2,0,-2.6], size:[2.8,1.3,2]},
+  taxab:    {label:"Taxability service",     cat:"engine",   pos:[11.4,0,0],   size:[2.8,1.3,2]},
+  exempt:   {label:"Exemption service",      cat:"engine",   pos:[7.2,0,2.6],  size:[2.8,1.3,2]},
+  rates:    {label:"Rate service",           cat:"engine",   pos:[2.6,0,2.6],  size:[2.8,1.3,2]},
+  calc:     {label:"Calculation service",    cat:"engine",   pos:[-2,0,2.6],   size:[2.8,1.3,2]},
+  cache:    {label:"Cache (rates and rules)",cat:"data",     pos:[4.6,0,-6],   size:[2.0,1.2,2.0], cyl:true},
+  content:  {label:"Tax content database",   cat:"data",     pos:[4.6,0,-12.5],size:[2.6,2.2,2.6], cyl:true},
+  txdb:     {label:"Transaction database",   cat:"data",     pos:[-13,0,-10],  size:[2.6,2.2,2.6], cyl:true},
+  report:   {label:"Returns and reporting",  cat:"post",     pos:[-20,0,-10],  size:[2.8,1.6,2.2]},
+  certs:    {label:"Certificate database",   cat:"data",     pos:[8.5,0,11.8], size:[2.4,2.0,2.4], cyl:true},
+  customer: {label:"Customer",               cat:"customer", pos:[-15,0,20.5], size:[2.6,1.6,2.4]},
+  portal:   {label:"Customer portal",        cat:"ecm",      pos:[-4,0,18.3],  size:[2.8,1.3,2]},
+  capture:  {label:"Data capture",           cat:"ecm",      pos:[0.5,0,18.3], size:[2.8,1.3,2]},
+  validate: {label:"Validation",             cat:"ecm",      pos:[5,0,18.3],   size:[2.8,1.3,2]},
+  bulk:     {label:"Bulk import",            cat:"ecm",      pos:[-4,0,22.7],  size:[2.8,1.3,2]},
+  monitor:  {label:"Expiration monitor",     cat:"ecm",      pos:[0.5,0,22.7], size:[2.8,1.3,2]},
+  audit:    {label:"Exemption audit reports",cat:"post",     pos:[15,0,20.5],  size:[2.8,1.6,2.2]}
+};
+
+var TAX_STEPS = [
+  {at:"erp", path:null, kind:"request",
+   title:"The ERP creates an invoice",
+   where:"Company systems",
+   desc:"A sales order or invoice is created in the ERP as part of order-to-cash. Before the document is finalized, the ERP needs to know how much tax to charge.",
+   code:'Invoice INV-10482\nCustomer: C-2231\nShip from: Warehouse, State A\nShip to:   Customer site, State B\nLine 1: Item SKU-771, qty 10, $1,000.00'},
+  {at:"conn", path:["erp","conn"], kind:"request",
+   title:"The connector builds the tax request",
+   where:"Company systems",
+   desc:"The ERP's tax integration maps ERP fields into the engine's request format and calls the engine's API, usually REST with JSON or SOAP with XML. This happens in real time while the user waits.",
+   code:'POST /v1/tax/calculate\n{\n  "companyCode": "ACME-US",\n  "docType": "SalesInvoice",\n  "docDate": "2026-09-29",\n  "customerCode": "C-2231",\n  "shipFrom": { ...address },\n  "shipTo":   { ...address },\n  "lines": [{ "item": "SKU-771",\n    "taxCode": "P0000000",\n    "qty": 10, "amount": 1000.00 }]\n}'},
+  {at:"gateway", path:["conn","gateway"], kind:"request",
+   title:"The API gateway checks and routes the call",
+   where:"Front door of the tax engine",
+   desc:"Every call enters through the API gateway. It authenticates the caller, enforces rate limits, and routes the request to a healthy instance of the calculation services behind it. The services themselves are never exposed directly.",
+   code:'Gateway checks\n  Auth: OAuth token valid\n  Rate limit: 120 of 1,000 per minute\n  Route: /calculate -> calculation services\n  Instance: calc-03 (load balanced)'},
+  {at:"addr", path:["gateway","addr"], kind:"request", uses:["cache"],
+   title:"Addresses are validated and geocoded",
+   where:"Address service",
+   desc:"The address service standardizes the ship-to and ship-from addresses and pins them to an exact location. ZIP codes often cross tax boundaries, so precise geocoding is what makes the next step accurate.",
+   code:'Input:  "123 Main st, suite 4"\nOutput: 123 MAIN ST STE 4\n        ZIP+4 verified\n        lat/long resolved'},
+  {at:"juris", path:["addr","juris"], kind:"request", uses:["cache"],
+   title:"Taxing jurisdictions are determined",
+   where:"Jurisdiction service",
+   desc:"Using the location and sourcing rules (origin or destination based), the service finds every jurisdiction that can tax this sale: state, county, city, and special districts like transit.",
+   code:'Jurisdictions found:\n  State B\n  County X\n  City Y\n  Transit district Z\nSourcing: destination'},
+  {at:"nexus", path:["juris","nexus"], kind:"request",
+   title:"Nexus is checked",
+   where:"Nexus service",
+   desc:"For each jurisdiction, the service checks whether the company is obligated to collect tax there, based on physical presence or economic nexus settings configured for the company.",
+   code:'State B: nexus = yes (economic)\nLocal jurisdictions follow state\nNo nexus = no tax collected'},
+  {at:"taxab", path:["nexus","taxab"], kind:"request", uses:["cache"],
+   title:"Product taxability is applied",
+   where:"Taxability service",
+   desc:"The item's tax code is matched to the taxability rules for each jurisdiction. The same product can be taxable in one place, exempt in another, or taxed at a reduced rate.",
+   code:'Tax code P0000000 (general goods)\n  State B:  taxable\n  County X: taxable\n  City Y:   taxable\n  Transit:  taxable'},
+  {at:"exempt", path:["taxab","exempt"], kind:"request", uses:["certs"],
+   title:"Exemptions are checked",
+   where:"Exemption service",
+   desc:"If the customer is exempt, such as a reseller, nonprofit, or government buyer, the service looks up a valid exemption certificate for this jurisdiction in the certificate database. A valid certificate removes the tax.",
+   code:'Customer C-2231\n  Certificate on file: none\n  Result: not exempt, tax applies'},
+  {at:"rates", path:["exempt","rates"], kind:"request", uses:["cache"],
+   title:"Rates are looked up from cache",
+   where:"Rate service",
+   desc:"Rates effective on the document date come from an in-memory cache, not the database. The cache is refreshed from the tax content database on each content update, which is a big reason calculations return in milliseconds.",
+   code:'Effective 2026-09-29 (illustrative)\n  State B     5.00%\n  County X    1.00%\n  City Y      2.00%\n  Transit Z   0.25%\n  Combined    8.25%\nSource: cache hit'},
+  {at:"calc", path:["rates","calc"], kind:"request", uses:["txdb"],
+   title:"Tax is calculated and saved",
+   where:"Calculation service",
+   desc:"Tax is computed per line and per jurisdiction, rounded according to each jurisdiction's rules, and totaled. The result is saved in the transaction database as uncommitted.",
+   code:'Line 1: $1,000.00 taxable\n  State B     $50.00\n  County X    $10.00\n  City Y      $20.00\n  Transit Z    $2.50\n  Total tax   $82.50\nSaved: INV-10482 (uncommitted)'},
+  {at:"erp", path:["calc","gateway","conn","erp"], kind:"response",
+   title:"The result goes back to the ERP",
+   where:"Tax engine to company systems",
+   desc:"The response travels back out through the API gateway to the connector, which writes tax by line and by jurisdiction onto the invoice. The whole round trip typically takes well under a second.",
+   code:'200 OK\n{\n  "totalAmount": 1000.00,\n  "totalTax": 82.50,\n  "lines": [{ "tax": 82.50,\n    "details": [ ...4 jurisdictions ] }]\n}'},
+  {at:"txdb", path:["erp","conn","gateway","txdb"], kind:"commit",
+   title:"The transaction is committed",
+   where:"Transaction database",
+   desc:"When the invoice is posted, the ERP sends a commit call through the gateway, and the saved transaction is marked final in the transaction database. Returns and credits later send adjustments or voids.",
+   code:'POST /v1/tax/commit\n  doc: INV-10482\n  status: Committed\n  tax: $82.50'},
+  {at:"report", path:["txdb","report"], kind:"commit",
+   title:"Data feeds returns and reporting",
+   where:"After the sale",
+   desc:"Committed transactions roll up by jurisdiction for filing returns and remitting tax, reconciling to the general ledger, and supporting audits.",
+   code:'State B return, September\n  Gross sales       $1,000.00\n  Taxable sales     $1,000.00\n  Tax collected        $82.50'}
+];
+
+var ECM_STEPS = [
+  {at:"erp", path:null, kind:"request", chip:"Exempt order",
+   title:"An exempt customer places an order",
+   where:"Company systems",
+   desc:"A reseller places an order. They say the purchase is for resale, but there's no certificate on file yet, so the sale can't be treated as exempt.",
+   code:'Order SO-20931\nCustomer: C-2231 (reseller)\nShip to: State B\nExemption claimed: resale\nCertificate on file: none'},
+  {at:"customer", path:["erp","portal","customer"], kind:"request", chip:"Request sent",
+   title:"ECM requests a certificate",
+   where:"ECM to the customer",
+   desc:"The customer record syncs from the ERP to ECM, and ECM sends the customer a request with a secure link to the certificate portal. This is often triggered automatically by onboarding or the first order.",
+   code:'To: purchasing@customer.example\nRequest: resale certificate, State B\nLink: portal/requests/8f3k...\nDue in: 30 days'},
+  {at:"portal", path:["customer","portal"], kind:"doc", chip:"Customer submits",
+   title:"The customer submits a certificate",
+   where:"Customer portal",
+   desc:"The customer either fills out the correct state form online, guided step by step, or uploads a certificate they already have as a PDF or image.",
+   code:'Submitted: State B resale certificate\nMethod: guided online form\nSignature: electronic'},
+  {at:"capture", path:["portal","capture"], kind:"doc", chip:"Data capture",
+   title:"Certificate data is captured",
+   where:"ECM data capture",
+   desc:"For uploaded documents, OCR and AI extract the key fields so nobody has to retype them. Fields with low confidence go to a person for review.",
+   code:'Purchaser:      Customer Co.\nExempt reason:  Resale\nPermit number:  B-448210\nStates:         State B\nSigned:         2026-09-29\nExpires:        per state rule'},
+  {at:"validate", path:["capture","validate"], kind:"doc", chip:"Validation",
+   title:"The certificate is validated",
+   where:"ECM validation",
+   desc:"ECM checks that it's the right form for the state, the exemption reason is allowed there, required fields and signature are present, and it isn't expired. Invalid certificates go back to the customer with the reason.",
+   code:'Correct state form       pass\nReason allowed in State B pass\nRequired fields           pass\nSignature                 pass\nNot expired               pass\nStatus: valid'},
+  {at:"certs", path:["validate","certs"], kind:"doc", chip:"Store and link",
+   title:"Stored and linked to the customer account",
+   where:"Certificate database, shared by ECM and the tax engine",
+   desc:"The certificate is stored and linked to the customer's account number, ship-to locations, jurisdictions, and effective dates. Accurate linking is what lets the tax engine find it when a sale happens.",
+   code:'CERT-55190\n  Account:   C-2231\n  Ship-to:   all State B locations\n  Reason:    resale\n  Effective: 2026-09-29\n  Expires:   2029-09-29 (illustrative)'},
+  {at:"certs", path:["bulk","certs"], kind:"doc", chip:"Bulk import",
+   title:"Existing certificates arrive in bulk",
+   where:"ECM bulk import",
+   desc:"When a company onboards or migrates, it loads thousands of existing certificates at once. Matching each one to the right customer account is often the hardest part, and unmatched records need review.",
+   code:'import_certificates.csv\n  Rows:               4,812\n  Matched to account: 4,690\n  Needs review:         122'},
+  {at:"exempt", path:["certs","exempt"], kind:"sync", chip:"Available to engine",
+   title:"The tax engine can see the certificate",
+   where:"Certificate database to the exemption service",
+   desc:"ECM writes to the same certificate database the tax engine's exemption service reads, so a newly validated certificate is available for the very next transaction.",
+   code:'Customer C-2231\n  State B: exempt (resale)\n  Certificate: CERT-55190\n  Valid through: 2029-09-29'},
+  {at:"exempt", path:["erp","conn","gateway","exempt"], kind:"request", chip:"Exempt sale", uses:["certs"],
+   title:"An exempt sale is calculated",
+   where:"ERP through the gateway to the tax engine",
+   desc:"The ERP sends a tax request through the connector and API gateway. The exemption service finds a valid certificate for that customer, jurisdiction, and date, and exempts the line instead of taxing it.",
+   code:'Request: customer C-2231, ship to State B\n         line amount $1,000.00\nCertificate found: CERT-55190\n  Valid for State B, resale\nTaxable amount: $0.00'},
+  {at:"erp", path:["exempt","gateway","conn","erp"], kind:"response", chip:"Back to ERP",
+   title:"Tax is $0 and the certificate is recorded",
+   where:"Tax engine to the ERP",
+   desc:"The response returns zero tax along with the exemption reason and certificate ID, so every exempt transaction is tied to the document that justifies it.",
+   code:'200 OK\n{\n  "totalTax": 0.00,\n  "exemptAmount": 1000.00,\n  "exemptReason": "Resale",\n  "certificateId": "CERT-55190"\n}'},
+  {at:"monitor", path:["certs","monitor"], kind:"alert", chip:"Expirations",
+   title:"Expirations are monitored",
+   where:"ECM expiration monitor",
+   desc:"ECM tracks expiration dates and state renewal rules, and flags certificates coming due at 90, 60, and 30 days, before exempt sales start going out without coverage.",
+   code:'Expiring in 90 days:  38 certificates\nExpiring in 60 days:  21\nExpiring in 30 days:  9\nExpired, still selling: 0'},
+  {at:"customer", path:["monitor","portal","customer"], kind:"alert", chip:"Renewal",
+   title:"A renewal request goes out automatically",
+   where:"ECM to the customer",
+   desc:"The customer gets a renewal request with a portal link, and reminders follow if they don't respond. If the certificate lapses, the exemption service stops exempting and tax applies again.",
+   code:'Renewal request: CERT-55190\n  Sent: 90 days before expiration\n  Reminders: 60 and 30 days\n  If lapsed: tax applies'},
+  {at:"audit", path:["certs","audit"], kind:"sync", chip:"Audit",
+   title:"Audit-ready reporting",
+   where:"After the sale",
+   desc:"When an auditor samples exempt sales, ECM produces the matching certificate for each one. Missing or invalid certificates are where audit assessments usually come from, so this is where ECM pays for itself.",
+   code:'Audit sample: 250 exempt invoices\n  Valid certificate found: 250\n  Missing or invalid:        0\n  Potential assessment:  $0.00'}
+];
+
+var FLOWS = { tax:{steps:TAX_STEPS}, ecm:{steps:ECM_STEPS} };
+var flowKey = "tax";
+var STEPS = TAX_STEPS;
+
+var DATA_LINKS = [["content","cache"],["cache","addr"],["cache","juris"],["cache","taxab"],["cache","rates"],["certs","exempt"],["txdb","calc"]];
+
+// ---------- Helpers ----------
+function cssVar(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+function catColor(cat){ return cssVar(CAT[cat]) || "#888"; }
+var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// ---------- WebGL check ----------
+var renderer;
+try{
+  renderer = new THREE.WebGLRenderer({antialias:true, alpha:false});
+}catch(e){
+  document.getElementById("err").style.display="grid";
+  return;
+}
+var stage = document.getElementById("stage");
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+stage.appendChild(renderer.domElement);
+
+var scene = new THREE.Scene();
+var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 500);
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x445566, 0.9));
+var sun = new THREE.DirectionalLight(0xffffff, 0.75);
+sun.position.set(10, 20, 12);
+scene.add(sun);
+
+// Ground grid
+var grid;
+function buildGrid(){
+  if (grid) scene.remove(grid);
+  var c = new THREE.Color(cssVar("--grid") || "#999");
+  grid = new THREE.GridHelper(130, 52, c, c);
+  grid.position.y = -0.01;
+  grid.material.transparent = true;
+  grid.material.opacity = 0.55;
+  scene.add(grid);
+}
+
+// ---------- Labels ----------
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();
+}
+function makeLabel(text, badgeText, badgeColor, big){
+  var font = big ? "800 64px Manrope, sans-serif" : "700 44px Manrope, sans-serif";
+  var c = document.createElement("canvas");
+  var ctx = c.getContext("2d");
+  ctx.font = font;
+  var tw = ctx.measureText(text).width;
+  var pad = big ? 36 : 26, badge = badgeText ? 56 : 0, h = big ? 110 : 80;
+  c.width = Math.ceil(tw + pad*2 + (badge ? badge + 14 : 0));
+  c.height = h;
+  ctx = c.getContext("2d");
+  ctx.font = font;
+  ctx.fillStyle = big ? "rgba(20,33,48,0.0)" : "rgba(17,27,39,0.86)";
+  roundRect(ctx,0,0,c.width,c.height,h/2);
+  ctx.fill();
+  var x = pad;
+  if (badgeText){
+    ctx.fillStyle = badgeColor;
+    ctx.beginPath();ctx.arc(pad + badge/2 - 8, h/2, badge/2, 0, Math.PI*2);ctx.fill();
+    ctx.fillStyle = "#fff";
+    ctx.font = "800 30px Manrope, sans-serif";
+    ctx.textAlign = "center";ctx.textBaseline = "middle";
+    ctx.fillText(badgeText, pad + badge/2 - 8, h/2 + 1);
+    x = pad + badge + 6;
+  }
+  ctx.font = font;
+  ctx.textAlign = "left";ctx.textBaseline = "middle";
+  ctx.fillStyle = big ? badgeColor : "#ffffff";
+  ctx.fillText(text, x, h/2 + 2);
+  var tex = new THREE.CanvasTexture(c);
+  tex.minFilter = THREE.LinearFilter;
+  var mat = new THREE.SpriteMaterial({map:tex, transparent:true, depthTest:false});
+  var s = new THREE.Sprite(mat);
+  var scale = big ? 0.024 : 0.024;
+  s.scale.set(c.width*scale, c.height*scale, 1);
+  s.renderOrder = 10;
+  return s;
+}
+
+// First step at which each node is the destination (for badges)
+var firstStep = {};
+function computeFirst(){ firstStep = {}; STEPS.forEach(function(s,i){ if (firstStep[s.at] === undefined) firstStep[s.at] = i; }); }
+function flowNodeSet(){
+  var set = {};
+  STEPS.forEach(function(s){ set[s.at] = 1; (s.path||[]).forEach(function(x){ set[x] = 1; }); (s.uses||[]).forEach(function(x){ set[x] = 1; }); });
+  if (set.cache) set.content = 1;
+  return set;
+}
+
+// ---------- Build scene ----------
+var nodeObjs = {};   // id -> {group, mesh, mat, edges, ring, label, baseY}
+var pickables = [];
+var world = new THREE.Group();
+scene.add(world);
+
+var enclosure, engineLabel;
+
+function buildScene(){
+  // clear
+  while (world.children.length) world.remove(world.children[0]);
+  pickables.length = 0;
+  nodeObjs = {};
+
+  computeFirst();
+  var inFlow = flowNodeSet();
+  // Platform enclosures
+  ENCLS.forEach(function(E){
+    var eGeo = new THREE.BoxGeometry(E.w*SP, 4.2, E.d*SP);
+    var eEdges = new THREE.LineSegments(new THREE.EdgesGeometry(eGeo),
+      new THREE.LineBasicMaterial({color:new THREE.Color(catColor(E.cat)), transparent:true, opacity:0.55}));
+    eEdges.position.set(E.cx*SP, 2.1, E.cz*SP);
+    var faded = E.cat === "ecm" && flowKey === "tax";
+    if (faded) eEdges.material.opacity = 0.15;
+    world.add(eEdges);
+    var floor = new THREE.Mesh(new THREE.PlaneGeometry(E.w*SP, E.d*SP),
+      new THREE.MeshBasicMaterial({color:new THREE.Color(catColor(E.cat)), transparent:true, opacity:0.08, side:THREE.DoubleSide}));
+    floor.rotation.x = -Math.PI/2;
+    floor.position.set(E.cx*SP, 0.01, E.cz*SP);
+    world.add(floor);
+    var lbl = makeLabel(E.label, null, catColor(E.cat), true);
+    if (faded) lbl.material.opacity = 0.3;
+    lbl.position.set(E.cx*SP, 5.2, (E.cz - E.d/2)*SP);
+    world.add(lbl);
+  });
+
+  // Nodes
+  Object.keys(NODES).forEach(function(id){
+    var n = NODES[id];
+    var color = new THREE.Color(catColor(n.cat));
+    var g = new THREE.Group();
+    g.position.set(n.pos[0]*SP, 0, n.pos[2]*SP);
+    var geo, mesh;
+    var mat = new THREE.MeshStandardMaterial({color:color, roughness:0.55, metalness:0.08, emissive:color, emissiveIntensity:0.08});
+    if (n.cyl){
+      // stacked disks read as a database
+      var disks = 3, hh = n.size[1]/disks;
+      var group = new THREE.Group();
+      for (var d=0; d<disks; d++){
+        var dm = new THREE.Mesh(new THREE.CylinderGeometry(n.size[0]/2, n.size[0]/2, hh*0.82, 40), mat);
+        dm.position.y = hh*d + hh/2;
+        dm.userData.id = id;
+        group.add(dm);
+        pickables.push(dm);
+      }
+      mesh = group;
+      g.add(group);
+    } else {
+      geo = new THREE.BoxGeometry(n.size[0], n.size[1], n.size[2]);
+      mesh = new THREE.Mesh(geo, mat);
+      mesh.position.y = n.size[1]/2;
+      mesh.userData.id = id;
+      g.add(mesh);
+      pickables.push(mesh);
+      var edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo),
+        new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:0.35}));
+      edges.position.copy(mesh.position);
+      g.add(edges);
+    }
+    // highlight ring
+    var r = Math.max(n.size[0], n.size[2]) * 0.78;
+    var ring = new THREE.Mesh(new THREE.RingGeometry(r, r+0.18, 64),
+      new THREE.MeshBasicMaterial({color:color, transparent:true, opacity:0, side:THREE.DoubleSide}));
+    ring.rotation.x = -Math.PI/2;
+    ring.position.y = 0.03;
+    g.add(ring);
+    // label
+    var fs = firstStep[id];
+    var label = makeLabel(n.label, fs !== undefined ? String(fs+1) : null, catColor(n.cat), false);
+    if (!inFlow[id]){ mat.transparent = true; mat.opacity = 0.14; label.visible = false; }
+    label.position.set(0, n.size[1] + 1.0, 0);
+    g.add(label);
+
+    world.add(g);
+    nodeObjs[id] = {group:g, mesh:mesh, mat:mat, ring:ring, label:label, h:n.size[1]};
+  });
+
+  // Data links (dashed)
+  dataLinkObjs = [];
+  DATA_LINKS.forEach(function(pair){
+    var a = nodeObjs[pair[0]].group.position, b = nodeObjs[pair[1]].group.position;
+    var curve = new THREE.QuadraticBezierCurve3(
+      new THREE.Vector3(a.x, 1.2, a.z),
+      new THREE.Vector3((a.x+b.x)/2, 3.2, (a.z+b.z)/2),
+      new THREE.Vector3(b.x, 1.0, b.z));
+    var geo = new THREE.BufferGeometry().setFromPoints(curve.getPoints(40));
+    var mat = new THREE.LineDashedMaterial({color:new THREE.Color(catColor("data")), dashSize:0.35, gapSize:0.25, transparent:true, opacity:0.45});
+    var line = new THREE.Line(geo, mat);
+    line.computeLineDistances();
+    world.add(line);
+    dataLinkObjs.push({pair:pair, line:line, mat:mat});
+  });
+
+  // Step paths
+  pathObjs = [];
+  STEPS.forEach(function(s, i){
+    if (!s.path){ pathObjs.push(null); return; }
+    var pts = [];
+    for (var k=0; k<s.path.length-1; k++){
+      var a = nodeObjs[s.path[k]].group.position, b = nodeObjs[s.path[k+1]].group.position;
+      var ha = nodeObjs[s.path[k]].h, hb = nodeObjs[s.path[k+1]].h;
+      var lift = (s.kind === "response" ? 3.6 : (s.kind === "commit" ? 2.6 : 1.9)) + Math.hypot(b.x-a.x, b.z-a.z)*0.04;
+      var off = s.kind === "response" ? 1.2 : 0;
+      var start = new THREE.Vector3(a.x, ha*0.6, a.z + off);
+      var end = new THREE.Vector3(b.x, hb*0.6, b.z + off);
+      var mid = new THREE.Vector3((a.x+b.x)/2, Math.max(ha,hb) + lift, (a.z+b.z)/2 + off);
+      if (k === 0) pts.push(start);
+      pts.push(mid, end);
+    }
+    var curve = new THREE.CatmullRomCurve3(pts, false, "centripetal");
+    var tube = new THREE.Mesh(new THREE.TubeGeometry(curve, 120, 0.09, 8, false),
+      new THREE.MeshBasicMaterial({color:new THREE.Color(kindColor(s.kind)), transparent:true, opacity:0.22}));
+    world.add(tube);
+    pathObjs.push({curve:curve, tube:tube});
+  });
+
+  buildGrid();
+  scene.background = new THREE.Color(cssVar("--scene") || "#142130");
+}
+var dataLinkObjs = [], pathObjs = [];
+
+function kindColor(kind){
+  if (kind === "response") return "#34c28a";
+  if (kind === "commit" || kind === "alert") return catColor("post");
+  if (kind === "doc") return catColor("ecm");
+  if (kind === "sync") return catColor("data");
+  return catColor("client");
+}
+
+// ---------- Packet ----------
+function glowTexture(){
+  var c = document.createElement("canvas"); c.width = c.height = 128;
+  var ctx = c.getContext("2d");
+  var g = ctx.createRadialGradient(64,64,0,64,64,64);
+  g.addColorStop(0,"rgba(255,255,255,1)");
+  g.addColorStop(0.25,"rgba(255,255,255,0.7)");
+  g.addColorStop(1,"rgba(255,255,255,0)");
+  ctx.fillStyle = g; ctx.fillRect(0,0,128,128);
+  var t = new THREE.CanvasTexture(c); return t;
+}
+var glowTex = glowTexture();
+var packet = new THREE.Group();
+var packetCore = new THREE.Mesh(new THREE.SphereGeometry(0.32, 24, 16), new THREE.MeshBasicMaterial({color:0xffffff}));
+var packetGlow = new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex, color:0x6b9bf5, transparent:true, blending:THREE.AdditiveBlending, depthWrite:false}));
+packetGlow.scale.set(2.4,2.4,1);
+packet.add(packetCore); packet.add(packetGlow);
+scene.add(packet);
+var trail = [];
+for (var ti=0; ti<10; ti++){
+  var sp = new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex, color:0x6b9bf5, transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, opacity:0.6*(1-ti/10)}));
+  var sc = 1.2*(1-ti/12); sp.scale.set(sc,sc,1);
+  scene.add(sp); trail.push(sp);
+}
+
+// ---------- Camera orbit ----------
+var cam = {
+  target:new THREE.Vector3(-1,0,1), goal:new THREE.Vector3(-1,0,1),
+  radius:44, goalRadius:44, theta:0.35, goalTheta:0.35, phi:0.95, goalPhi:0.95
+};
+var DEFAULT_VIEW = {target:[-3,0,7.5], radius:92, theta:0.35, phi:0.92};
+function fitFactor(max){
+  var aspect = window.innerWidth / Math.max(1, window.innerHeight);
+  return aspect < 1.2 ? clamp(1.1/aspect, 1, max) : 1;
+}
+function isPhone(){ return window.innerWidth < 760; }
+function resetView(){
+  cam.goal.set(DEFAULT_VIEW.target[0],DEFAULT_VIEW.target[1],DEFAULT_VIEW.target[2]);
+  cam.goalRadius = DEFAULT_VIEW.radius * fitFactor(1.9);
+  cam.goalTheta = DEFAULT_VIEW.theta; cam.goalPhi = DEFAULT_VIEW.phi;
+}
+function applyCamera(){
+  var k = reduceMotion ? 1 : 0.09;
+  cam.target.lerp(cam.goal, k);
+  cam.radius += (cam.goalRadius - cam.radius)*k;
+  cam.theta += (cam.goalTheta - cam.theta)*k;
+  cam.phi += (cam.goalPhi - cam.phi)*k;
+  var sp = Math.sin(cam.phi);
+  camera.position.set(
+    cam.target.x + cam.radius*sp*Math.sin(cam.theta),
+    cam.target.y + cam.radius*Math.cos(cam.phi),
+    cam.target.z + cam.radius*sp*Math.cos(cam.theta));
+  camera.lookAt(cam.target);
+}
+
+var pointers = new Map();
+var dragMode = null, lastX = 0, lastY = 0, downX = 0, downY = 0, pinchDist = 0, lastMid = null;
+function pan(dx, dy){
+  var scale = cam.radius * 0.0016;
+  var right = new THREE.Vector3(Math.cos(cam.theta), 0, -Math.sin(cam.theta));
+  var fwd = new THREE.Vector3(Math.sin(cam.theta), 0, Math.cos(cam.theta));
+  cam.goal.addScaledVector(right, -dx*scale);
+  cam.goal.addScaledVector(fwd, -dy*scale);
+}
+function userMoved(){ if (follow){ follow = false; syncFollow(); } }
+
+stage.addEventListener("contextmenu", function(e){ e.preventDefault(); });
+stage.addEventListener("pointerdown", function(e){
+  stage.setPointerCapture(e.pointerId);
+  pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  lastX = downX = e.clientX; lastY = downY = e.clientY;
+  if (pointers.size === 2){
+    var p = Array.from(pointers.values());
+    pinchDist = Math.hypot(p[0].x-p[1].x, p[0].y-p[1].y);
+    lastMid = {x:(p[0].x+p[1].x)/2, y:(p[0].y+p[1].y)/2};
+    dragMode = "pinch";
+  } else {
+    dragMode = (e.button === 2 || e.shiftKey) ? "pan" : "rotate";
+  }
+  stage.classList.add("dragging");
+});
+stage.addEventListener("pointermove", function(e){
+  if (!pointers.has(e.pointerId)) return;
+  pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if (dragMode === "pinch" && pointers.size === 2){
+    var p = Array.from(pointers.values());
+    var d = Math.hypot(p[0].x-p[1].x, p[0].y-p[1].y);
+    var mid = {x:(p[0].x+p[1].x)/2, y:(p[0].y+p[1].y)/2};
+    if (pinchDist > 0){ cam.goalRadius = clamp(cam.goalRadius * pinchDist/d, 8, 220); }
+    pan(mid.x-lastMid.x, mid.y-lastMid.y);
+    pinchDist = d; lastMid = mid;
+    return;
+  }
+  var dx = e.clientX - lastX, dy = e.clientY - lastY;
+  lastX = e.clientX; lastY = e.clientY;
+  if (dragMode === "rotate"){
+    cam.goalTheta -= dx*0.006;
+    cam.goalPhi = clamp(cam.goalPhi - dy*0.005, 0.12, 1.48);
+  } else if (dragMode === "pan"){
+    pan(dx, dy); userMoved();
+  }
+});
+function endPointer(e){
+  var wasClick = pointers.size === 1 && dragMode !== "pinch" && Math.hypot(e.clientX-downX, e.clientY-downY) < 5;
+  pointers.delete(e.pointerId);
+  if (pointers.size === 0){ dragMode = null; stage.classList.remove("dragging"); }
+  else if (pointers.size === 1){ var p = Array.from(pointers.values())[0]; lastX = p.x; lastY = p.y; dragMode = "rotate"; }
+  if (wasClick && e.type === "pointerup") pick(e.clientX, e.clientY);
+}
+stage.addEventListener("pointerup", endPointer);
+stage.addEventListener("pointercancel", endPointer);
+stage.addEventListener("wheel", function(e){
+  e.preventDefault();
+  cam.goalRadius = clamp(cam.goalRadius * (1 + e.deltaY*0.0012), 8, 220);
+}, {passive:false});
+function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+
+// Picking
+var raycaster = new THREE.Raycaster(), mouse = new THREE.Vector2();
+var tip = document.getElementById("tip");
+function pick(x, y){
+  mouse.x = (x / window.innerWidth)*2 - 1;
+  mouse.y = -(y / window.innerHeight)*2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  var hits = raycaster.intersectObjects(pickables, false);
+  if (!hits.length) return;
+  var id = hits[0].object.userData.id;
+  if (id === "content") id = "cache";
+  var idx = findStep(STEPS, id);
+  if (idx !== undefined){ goTo(idx, true); return; }
+  var other = flowKey === "tax" ? "ecm" : "tax";
+  var j = findStep(FLOWS[other].steps, id);
+  if (j !== undefined){ setFlow(other); goTo(j, true); }
+}
+function findStep(list, id){
+  for (var i=0;i<list.length;i++){ if (list[i].at === id) return i; }
+  for (var k=0;k<list.length;k++){ if ((list[k].path && list[k].path.indexOf(id) >= 0) || (list[k].uses && list[k].uses.indexOf(id) >= 0)) return k; }
+  return undefined;
+}
+stage.addEventListener("pointermove", function(e){
+  if (pointers.size) return;
+  mouse.x = (e.clientX / window.innerWidth)*2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight)*2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  var hh = raycaster.intersectObjects(pickables, false);
+  stage.style.cursor = hh.length ? "pointer" : "";
+  if (hh.length){
+    var nid = hh[0].object.userData.id;
+    tip.innerHTML = "";
+    tip.appendChild(document.createTextNode(NODES[nid].label));
+    var sm = document.createElement("small"); sm.textContent = "Click to see this step"; tip.appendChild(sm);
+    tip.style.left = e.clientX + "px"; tip.style.top = e.clientY + "px"; tip.style.display = "block";
+  } else { tip.style.display = "none"; }
+});
+stage.addEventListener("pointerleave", function(){ tip.style.display = "none"; });
+stage.addEventListener("pointerdown", function(){ tip.style.display = "none"; });
+
+// ---------- Playback ----------
+var current = 0, stepStart = 0, playing = false, follow = true;
+var SPEEDS = {normal:[2.0,6.0], slow:[2.8,9.0]}, speed = "normal";
+var TRAVEL = SPEEDS.normal[0], DWELL = SPEEDS.normal[1];
+
+var panel = {
+  num:document.getElementById("pNum"), of:document.getElementById("pOf"),
+  title:document.getElementById("pTitle"), where:document.getElementById("pWhere"),
+  desc:document.getElementById("pDesc"), code:document.getElementById("pCode")
+};
+var rail = document.getElementById("rail");
+var chips = [];
+function buildChips(){
+  rail.innerHTML = ""; chips = [];
+  STEPS.forEach(function(s, i){
+    var b = document.createElement("button");
+    b.className = "chip"; b.type = "button";
+    b.innerHTML = '<b>' + (i+1) + '</b><span></span>';
+    b.querySelector("span").textContent = s.chip || (s.at === "erp" ? (i > 0 ? "Back to ERP" : "ERP") : NODES[s.at].label);
+    b.addEventListener("click", function(){ goTo(i, true); });
+    rail.appendChild(b); chips.push(b);
+  });
+}
+function setFlow(key){
+  flowKey = key; STEPS = FLOWS[key].steps;
+  document.querySelectorAll("[data-flow]").forEach(function(btn){ btn.setAttribute("aria-pressed", String(btn.getAttribute("data-flow") === key)); });
+  buildScene(); buildChips(); current = 0;
+}
+document.querySelectorAll("[data-flow]").forEach(function(btn){
+  btn.addEventListener("click", function(){ if (btn.getAttribute("data-flow") !== flowKey){ setFlow(btn.getAttribute("data-flow")); goTo(0, true); } });
+});
+buildChips();
+function paintChips(){
+  chips.forEach(function(c, i){
+    var col = catColor(NODES[STEPS[i].at].cat);
+    c.querySelector("b").style.background = col;
+    c.classList.toggle("active", i === current);
+    c.classList.toggle("done", i < current);
+    if (i === current) c.setAttribute("aria-current","step"); else c.removeAttribute("aria-current");
+  });
+}
+
+function goTo(i, userInitiated){
+  current = (i + STEPS.length) % STEPS.length;
+  stepStart = performance.now()/1000;
+  var s = STEPS[current];
+  panel.num.textContent = current+1;
+  panel.num.style.background = catColor(NODES[s.at].cat);
+  panel.of.textContent = "Step " + (current+1) + " of " + STEPS.length;
+  document.getElementById("prog").style.width = ((current+1)/STEPS.length*100) + "%";
+  if (userInitiated && playing){ playing = false; syncPlay(); }
+  panel.title.textContent = s.title;
+  panel.where.textContent = s.where;
+  panel.desc.textContent = s.desc;
+  panel.code.textContent = s.code;
+  paintChips();
+  var c = packetGlow.material.color; c.set(kindColor(s.kind));
+  trail.forEach(function(t){ t.material.color.set(kindColor(s.kind)); });
+  if (chips[current].scrollIntoView) chips[current].scrollIntoView({block:"nearest", inline:"center", behavior: reduceMotion ? "auto" : "smooth"});
+  if (userInitiated && !follow){ /* keep user's view */ }
+  if (follow) focusStep();
+}
+function focusStep(){
+  var s = STEPS[current];
+  var p = nodeObjs[s.at].group.position;
+  if (s.path){
+    var a = nodeObjs[s.path[0]].group.position;
+    cam.goal.set((a.x+p.x)/2, 0, (a.z+p.z)/2);
+    var span = Math.hypot(a.x-p.x, a.z-p.z);
+    cam.goalRadius = clamp(20 + span*0.8, 20, 70) * fitFactor(1.7);
+  } else {
+    cam.goal.set(p.x, 0, p.z);
+    cam.goalRadius = 22 * fitFactor(1.6);
+  }
+}
+
+var playBtn = document.getElementById("playBtn");
+var followBtn = document.getElementById("followBtn");
+function syncPlay(){ playBtn.innerHTML = playing ? "&#10074;&#10074; Pause tour" : "&#9654; Play tour"; playBtn.classList.toggle("primary", playing); }
+function syncFollow(){ followBtn.setAttribute("aria-pressed", String(follow)); }
+playBtn.addEventListener("click", function(){ playing = !playing; if (playing) stepStart = performance.now()/1000 - (STEPS[current].path ? 0 : 0); syncPlay(); });
+document.getElementById("nextBtn").addEventListener("click", function(){ goTo(current+1, true); });
+document.getElementById("prevBtn").addEventListener("click", function(){ goTo(current-1, true); });
+followBtn.addEventListener("click", function(){ follow = !follow; syncFollow(); if (follow) focusStep(); });
+document.getElementById("resetBtn").addEventListener("click", function(){ follow = false; syncFollow(); resetView(); });
+document.getElementById("zoomIn").addEventListener("click", function(){ cam.goalRadius = clamp(cam.goalRadius*0.8, 8, 110); });
+document.getElementById("zoomOut").addEventListener("click", function(){ cam.goalRadius = clamp(cam.goalRadius*1.25, 8, 220); });
+var speedBtn = document.getElementById("speedBtn");
+speedBtn.addEventListener("click", function(){
+  speed = speed === "normal" ? "slow" : "normal";
+  TRAVEL = SPEEDS[speed][0]; DWELL = SPEEDS[speed][1];
+  speedBtn.textContent = "Speed: " + speed;
+});
+var collapseBtn = document.getElementById("collapseBtn"), panelEl = document.getElementById("panel");
+collapseBtn.addEventListener("click", function(){
+  var c = panelEl.classList.toggle("collapsed");
+  collapseBtn.textContent = c ? "Show details" : "Hide details";
+  collapseBtn.setAttribute("aria-expanded", String(!c));
+});
+var intro = document.getElementById("intro");
+function closeIntro(){ intro.hidden = true; }
+document.getElementById("startTour").addEventListener("click", function(){
+  closeIntro(); follow = true; syncFollow(); goTo(0, false); playing = true; stepStart = performance.now()/1000; syncPlay();
+});
+document.getElementById("exploreBtn").addEventListener("click", function(){ closeIntro(); playing = false; syncPlay(); });
+document.getElementById("helpBtn").addEventListener("click", function(){ intro.hidden = false; document.getElementById("startTour").focus(); });
+window.addEventListener("keydown", function(e){
+  if (e.key === "Escape" && !intro.hidden){ closeIntro(); return; }
+  if (!intro.hidden) return;
+  if (e.target.tagName === "BUTTON" && (e.key === " " || e.key === "Enter")) return;
+  if (e.key === "ArrowRight") goTo(current+1, true);
+  else if (e.key === "ArrowLeft") goTo(current-1, true);
+  else if (e.key === " "){ e.preventDefault(); playBtn.click(); }
+});
+
+// ---------- Frame loop ----------
+var tmp = new THREE.Vector3();
+function frame(){
+  var now = performance.now()/1000;
+  var s = STEPS[current];
+  var el = now - stepStart;
+  var travel = s.path ? TRAVEL : 0;
+  var u = travel ? clamp(el/travel, 0, 1) : 1;
+  var ease = reduceMotion ? 1 : (u<0.5 ? 2*u*u : 1 - Math.pow(-2*u+2, 2)/2);
+
+  // packet position
+  if (s.path && pathObjs[current]){
+    var curve = pathObjs[current].curve;
+    curve.getPointAt(ease, tmp);
+    packet.position.copy(tmp);
+    for (var i=0;i<trail.length;i++){
+      var tt = clamp(ease - (i+1)*0.025, 0, 1);
+      curve.getPointAt(tt, trail[i].position);
+      trail[i].visible = u < 1 && !reduceMotion;
+    }
+  } else {
+    var p = nodeObjs[s.at].group.position;
+    packet.position.set(p.x, nodeObjs[s.at].h + 0.5, p.z);
+    trail.forEach(function(t){ t.visible = false; });
+  }
+  if (u >= 1){
+    var p2 = nodeObjs[s.at].group.position;
+    var bob = reduceMotion ? 0 : Math.sin(now*3)*0.12;
+    packet.position.lerp(new THREE.Vector3(p2.x, nodeObjs[s.at].h + 0.55 + bob, p2.z), 0.2);
+  }
+
+  // node highlight
+  Object.keys(nodeObjs).forEach(function(id){
+    var o = nodeObjs[id];
+    var active = id === s.at && u >= 1;
+    var used = s.uses && s.uses.indexOf(id) >= 0 && u >= 1;
+    var target = active ? 0.55 : (used ? 0.35 : 0.08);
+    o.mat.emissiveIntensity += (target - o.mat.emissiveIntensity)*0.12;
+    var ro = active || used ? 0.9 : 0;
+    o.ring.material.opacity += (ro - o.ring.material.opacity)*0.12;
+    var pulse = active && !reduceMotion ? 1 + Math.sin(now*4)*0.05 : 1;
+    o.ring.scale.set(pulse, pulse, pulse);
+  });
+
+  // paths
+  pathObjs.forEach(function(po, i){
+    if (!po) return;
+    var target = i === current ? 0.9 : (i < current ? 0.3 : 0.14);
+    po.tube.material.opacity += (target - po.tube.material.opacity)*0.1;
+  });
+  dataLinkObjs.forEach(function(dl){
+    var on = u >= 1 && s.uses && ((s.uses.indexOf(dl.pair[0]) >= 0 && dl.pair[1] === s.at) || (dl.pair[0] === "content" && s.uses.indexOf("cache") >= 0));
+    var target = on ? 1 : 0.35;
+    dl.mat.opacity += (target - dl.mat.opacity)*0.12;
+  });
+
+  // advance
+  if (playing && el > travel + DWELL){ goTo(current+1, false); }
+
+  applyCamera();
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+
+// ---------- Resize and theme ----------
+function resize(){
+  var w = window.innerWidth, h = window.innerHeight;
+  renderer.setSize(w, h);
+  camera.aspect = w/h;
+  if (isPhone()) camera.setViewOffset(w, h, 0, Math.round(h*0.2), w, h); else camera.clearViewOffset();
+  camera.updateProjectionMatrix();
+}
+window.addEventListener("resize", resize);
+
+function rebuildForTheme(){
+  var keep = current;
+  buildScene();
+  current = keep;
+  paintChips();
+  panel.num.style.background = catColor(NODES[STEPS[current].at].cat);
+}
+if (window.matchMedia){
+  var mq = window.matchMedia("(prefers-color-scheme: dark)");
+  if (mq.addEventListener) mq.addEventListener("change", rebuildForTheme);
+}
+new MutationObserver(rebuildForTheme).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
+
+// ---------- Start ----------
+function start(){
+  buildScene();
+  resize();
+  resetView();
+  cam.target.copy(cam.goal); cam.radius = cam.goalRadius; cam.theta = cam.goalTheta; cam.phi = cam.goalPhi;
+  syncPlay(); syncFollow();
+  goTo(0, false);
+  resetView();
+  cam.target.copy(cam.goal); cam.radius = cam.goalRadius;
+  if (window.innerWidth < 760){ panelEl.classList.add("collapsed"); collapseBtn.textContent = "Show details"; collapseBtn.setAttribute("aria-expanded","false"); }
+  document.getElementById("startTour").focus();
+  requestAnimationFrame(frame);
+}
+if (document.fonts && document.fonts.ready){
+  var started = false;
+  document.fonts.ready.then(function(){ if (!started){ started = true; start(); } });
+  setTimeout(function(){ if (!started){ started = true; start(); } }, 1500);
+} else { start(); }
+
+})();
+</script>
+</body>
+</html>

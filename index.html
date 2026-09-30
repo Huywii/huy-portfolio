@@ -259,6 +259,8 @@
     .panel h3 { font-size: 1.05rem; }
     .panel p { margin-top: 6px; }
     .panel .muted { color: var(--muted); font-size: 0.92rem; }
+    .panel.feature { border-color: var(--seal); box-shadow: inset 4px 0 0 var(--seal); }
+    .panel .btn { margin-top: 16px; }
     .pill {
       display: inline-block;
       margin-top: 12px;
@@ -355,6 +357,7 @@
           <li><a href="#experience">Experience</a></li>
           <li><a href="#skills">Skills</a></li>
           <li><a href="#education">Education</a></li>
+          <li><a href="#projects">Side projects</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
@@ -560,15 +563,26 @@
         </div>
       </section>
 
-      <!-- Education + side project -->
+      <!-- Education -->
       <section id="education">
-        <h2>Education and side projects</h2>
+        <h2>Education</h2>
+        <div class="panel">
+          <h3>Bachelor of Business Administration in Finance</h3>
+          <p>Wichita State University, Wichita, KS</p>
+          <p class="muted">Minor in Management, cum laude</p>
+          <p class="muted">Languages: English, Vietnamese</p>
+        </div>
+      </section>
+
+      <!-- Side projects -->
+      <section id="projects">
+        <h2>Side projects</h2>
         <div class="pair">
-          <div class="panel">
-            <h3>Bachelor of Business Administration in Finance</h3>
-            <p>Wichita State University, Wichita, KS</p>
-            <p class="muted">Minor in Management, cum laude</p>
-            <p class="muted">Languages: English, Vietnamese</p>
+          <div class="panel feature">
+            <h3>How a tax engine and ECM work together</h3>
+            <p>An interactive 3D model that follows a sales invoice through a tax engine, from address validation and nexus to taxability, rates, and reporting, and an exemption certificate through ECM, from request to validation and storage. Each step explains what happens and shows sample data.</p>
+            <span class="pill">Interactive 3D</span>
+            <div><a class="btn btn-primary" href="tax-engine-ecm.html" target="_blank" rel="noopener">Open the 3D model</a></div>
           </div>
           <div class="panel">
             <h3>Simply Auto</h3>
