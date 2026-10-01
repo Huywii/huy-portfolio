@@ -1,636 +1,322 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Huy Ho | Senior Product Manager</title>
-  <meta name="description" content="Huy Ho, Senior Product Manager with 8+ years building enterprise software across tax, cybersecurity, healthcare compliance, and regulatory technology.">
-  <meta property="og:title" content="Huy Ho | Senior Product Manager">
-  <meta property="og:description" content="Senior Product Manager for compliance, tax, and regulatory software. Based in Denton, TX.">
-  <meta property="og:image" content="https://raw.githubusercontent.com/Huywii/huy-portfolio/main/Gemini_Generated_Image_fulh4zfulh4zfulh.png">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --paper: #F4F6F5;
-      --surface: #FFFFFF;
-      --ink: #15222E;
-      --muted: #56636E;
-      --rule: #D6DDDA;
-      --seal: #0E6B57;
-      --seal-dark: #0A5344;
-      --seal-soft: #E2EFEA;
-      --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
-      --sans: 'Public Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
-      --rail: 300px;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; scroll-padding-top: 24px; }
-    body {
-      font-family: var(--sans);
-      font-size: 1rem;
-      line-height: 1.6;
-      color: var(--ink);
-      background: var(--paper);
-      -webkit-font-smoothing: antialiased;
-    }
-    a { color: var(--seal); }
-    a:hover { color: var(--seal-dark); }
-    :focus-visible { outline: 3px solid var(--seal); outline-offset: 3px; border-radius: 4px; }
-    img { max-width: 100%; display: block; }
-
-    /* ---------- Layout: sticky profile rail + content ---------- */
-    .layout {
-      max-width: 1180px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: var(--rail) 1fr;
-      gap: 64px;
-      padding: 0 32px;
-    }
-
-    .rail {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      padding: 56px 0 32px;
-      display: flex;
-      flex-direction: column;
-    }
-    .rail .photo {
-      width: 104px;
-      height: 104px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid var(--surface);
-      box-shadow: 0 0 0 1px var(--rule);
-    }
-    .rail .name {
-      font-family: var(--serif);
-      font-weight: 600;
-      font-size: 2.25rem;
-      line-height: 1.1;
-      margin-top: 20px;
-    }
-    .rail .title { font-weight: 600; margin-top: 6px; }
-    .rail .where { color: var(--muted); font-size: 0.95rem; }
-
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 16px;
-      padding: 6px 12px;
-      background: var(--seal-soft);
-      color: var(--seal-dark);
-      border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      align-self: flex-start;
-    }
-    .status::before {
-      content: "";
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--seal);
-    }
-
-    .nav { margin-top: 36px; }
-    .nav ul { list-style: none; border-left: 1px solid var(--rule); }
-    .nav a {
-      display: block;
-      padding: 6px 0 6px 16px;
-      margin-left: -1px;
-      border-left: 2px solid transparent;
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-    .nav a:hover { color: var(--ink); }
-    .nav a.active { color: var(--ink); border-left-color: var(--seal); }
-
-    .rail-actions { margin-top: auto; display: flex; flex-direction: column; gap: 10px; padding-top: 24px; }
-
-    .btn {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      padding: 11px 18px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      text-decoration: none;
-      border: 1px solid transparent;
-      transition: background-color .15s ease, border-color .15s ease;
-    }
-    .btn-primary { background: var(--seal); color: #fff; }
-    .btn-primary:hover { background: var(--seal-dark); color: #fff; }
-    .btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--rule); }
-    .btn-secondary:hover { border-color: var(--ink); color: var(--ink); }
-    .btn svg { width: 16px; height: 16px; flex: none; }
-
-    main { padding: 56px 0 80px; min-width: 0; }
-    section { padding-top: 72px; }
-    section:first-child { padding-top: 0; }
-
-    h2 {
-      font-family: var(--serif);
-      font-weight: 600;
-      font-size: 1.75rem;
-      line-height: 1.2;
-      margin-bottom: 24px;
-    }
-
-    /* ---------- Intro ---------- */
-    .intro h1 {
-      font-family: var(--serif);
-      font-weight: 500;
-      font-size: clamp(2rem, 4.2vw, 3.1rem);
-      line-height: 1.12;
-      letter-spacing: -0.01em;
-      max-width: 26ch;
-    }
-    .intro p.lede {
-      margin-top: 24px;
-      font-size: 1.15rem;
-      color: var(--muted);
-      max-width: 62ch;
-    }
-
-    /* ---------- Impact ledger ---------- */
-    .ledger {
-      margin-top: 48px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      background: var(--surface);
-      border: 1px solid var(--rule);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    .ledger div {
-      padding: 22px 22px 24px;
-      border-right: 1px solid var(--rule);
-      border-bottom: 1px solid var(--rule);
-    }
-    .ledger div:nth-child(3n) { border-right: 0; }
-    .ledger div:nth-last-child(-n+3) { border-bottom: 0; }
-    .ledger strong {
-      display: block;
-      font-family: var(--serif);
-      font-weight: 600;
-      font-size: 2.1rem;
-      line-height: 1.1;
-      color: var(--seal-dark);
-    }
-    .ledger p { margin-top: 8px; font-size: 0.92rem; line-height: 1.5; }
-    .ledger span { display: block; margin-top: 6px; font-size: 0.8rem; color: var(--muted); }
-
-    /* ---------- Experience timeline ---------- */
-    .timeline { position: relative; }
-    .role {
-      position: relative;
-      padding: 0 0 40px 32px;
-      border-left: 2px solid var(--rule);
-    }
-    .role:last-child { padding-bottom: 0; }
-    .role::before {
-      content: "";
-      position: absolute;
-      left: -7px; top: 6px;
-      width: 12px; height: 12px;
-      border-radius: 50%;
-      background: var(--paper);
-      border: 2px solid var(--seal);
-    }
-    .role.current::before { background: var(--seal); }
-    .role-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; }
-    .role h3 { font-size: 1.15rem; font-weight: 700; line-height: 1.35; }
-    .role .dates { color: var(--muted); font-size: 0.92rem; white-space: nowrap; }
-    .role .org { color: var(--muted); font-weight: 500; margin-top: 2px; }
-    .role ul { margin-top: 14px; padding-left: 18px; max-width: 70ch; }
-    .role li { margin-bottom: 8px; }
-    .role li::marker { color: var(--seal); }
-
-    .role details { margin-top: 4px; }
-    .role summary {
-      display: inline-block;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.92rem;
-      color: var(--seal);
-      list-style: none;
-    }
-    .role summary::-webkit-details-marker { display: none; }
-    .role summary:hover { color: var(--seal-dark); text-decoration: underline; }
-    .role details[open] summary .more { display: none; }
-    .role details:not([open]) summary .less { display: none; }
-    .role details ul { margin-top: 12px; }
-
-    .earlier { margin-top: 40px; }
-    .earlier h3 { font-size: 1rem; }
-
-
-    /* ---------- Skills ---------- */
-    .skills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
-    .skills h3 { font-size: 1rem; margin-bottom: 10px; }
-    .skills ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
-    .skills li {
-      background: var(--surface);
-      border: 1px solid var(--rule);
-      border-radius: 6px;
-      padding: 4px 10px;
-      font-size: 0.88rem;
-    }
-
-    /* ---------- Education, side project ---------- */
-    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .panel {
-      background: var(--surface);
-      border: 1px solid var(--rule);
-      border-radius: 12px;
-      padding: 24px;
-    }
-    .panel h3 { font-size: 1.05rem; }
-    .panel p { margin-top: 6px; }
-    .panel .muted { color: var(--muted); font-size: 0.92rem; }
-    .panel.feature { border-color: var(--seal); box-shadow: inset 4px 0 0 var(--seal); }
-    .panel .btn { margin-top: 16px; }
-    .pill {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 3px 10px;
-      border-radius: 999px;
-      background: var(--paper);
-      border: 1px solid var(--rule);
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--muted);
-    }
-
-    /* ---------- Contact ---------- */
-    .contact {
-      background: var(--ink);
-      color: #fff;
-      border-radius: 16px;
-      padding: 44px;
-    }
-    .contact h2 { color: #fff; max-width: 22ch; margin-bottom: 12px; }
-    .contact p { color: #C9D2D8; max-width: 55ch; }
-    .contact .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
-    .contact .btn-secondary { background: transparent; color: #fff; border-color: #56636E; }
-    .contact .btn-secondary:hover { border-color: #fff; color: #fff; }
-    .contact .btn-primary { background: #fff; color: var(--ink); }
-    .contact .btn-primary:hover { background: var(--seal-soft); color: var(--ink); }
-    .contact :focus-visible { outline-color: #fff; }
-
-    footer { margin-top: 40px; color: var(--muted); font-size: 0.85rem; }
-
-    /* ---------- Responsive ---------- */
-    @media (max-width: 1000px) {
-      .ledger { grid-template-columns: repeat(2, 1fr); }
-      .ledger div:nth-child(3n) { border-right: 1px solid var(--rule); }
-      .ledger div:nth-child(2n) { border-right: 0; }
-      .ledger div:nth-last-child(-n+3) { border-bottom: 1px solid var(--rule); }
-      .ledger div:nth-last-child(-n+2) { border-bottom: 0; }
-      .skills { grid-template-columns: 1fr; gap: 20px; }
-    }
-
-    @media (max-width: 820px) {
-      .layout { grid-template-columns: 1fr; gap: 0; padding: 0 20px; }
-      .rail {
-        position: static;
-        height: auto;
-        padding: 36px 0 0;
-        text-align: left;
-      }
-      .rail .photo { width: 88px; height: 88px; }
-      .rail .name { font-size: 2rem; }
-      .nav { display: none; }
-      .rail-actions { flex-direction: row; flex-wrap: wrap; margin-top: 20px; }
-      .rail-actions .btn { flex: 1 1 140px; }
-      main { padding-top: 48px; }
-      section { padding-top: 56px; }
-      .pair { grid-template-columns: 1fr; }
-      .contact { padding: 32px 24px; }
-    }
-
-    @media (max-width: 520px) {
-      .ledger { grid-template-columns: 1fr; }
-      .ledger div { border-right: 0 !important; border-bottom: 1px solid var(--rule) !important; }
-      .ledger div:last-child { border-bottom: 0 !important; }
-      .role { padding-left: 24px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      * { transition: none !important; }
-    }
-
-    @media print {
-      .rail { position: static; height: auto; }
-      .nav, .rail-actions, .contact .actions { display: none; }
-      .role details { display: block; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Huy Ho | Senior Product Manager</title>
+<meta name="description" content="Huy Ho, Senior Product Manager with 8+ years building enterprise software across tax, cybersecurity, healthcare compliance, and regulatory technology.">
+<meta property="og:title" content="Huy Ho | Senior Product Manager">
+<meta property="og:description" content="Senior Product Manager for compliance, tax, and regulatory software. Based in Denton, TX.">
+<meta property="og:image" content="https://raw.githubusercontent.com/Huywii/huy-portfolio/main/Portrait.jpeg">
+<script>
+(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+:root{--bg:#0B0D12;--surf:#0F1218;--vis:#12161E;--line:#1E222B;--border:#343944;--chip:#262B35;--chip-text:#C5C9D1;--art:#4A505C;
+--head:#FFFFFF;--text:#EDEEF0;--muted:#A3A8B3;--dim:#8A909C;--btn-bg:#F3F4F6;--btn-fg:#0B0D12;--accent:#8EA6FF;
+--pill-border:#23402F;--pill-bg:#0F1A14;--pill-text:#8FD9A8;--pill-dot:#4ADE80;color-scheme:dark}
+:root[data-theme="light"]{--bg:#FFFFFF;--surf:#F7F8FA;--vis:#EEF0F4;--line:#E6E8EC;--border:#D5D9E0;--chip:#DDE1E7;--chip-text:#3F4550;--art:#A0A6B1;
+--head:#0E1116;--text:#0E1116;--muted:#565C68;--dim:#6B7280;--btn-bg:#0E1116;--btn-fg:#FFFFFF;--accent:#3B5BDB;
+--pill-border:#B7E4C7;--pill-bg:#ECFDF3;--pill-text:#166534;--pill-dot:#22C55E;color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+a{text-decoration:none}
+a:hover{opacity:.82}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:999px}
+:root[data-theme="dark"] .icon-moon{display:none}
+:root[data-theme="light"] .icon-sun{display:none}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
 </head>
-
 <body>
-  <div class="layout">
+<div style="background: var(--bg); color: var(--text); font-family: 'Geist', 'Helvetica Neue', sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; transition: background-color .3s ease, color .3s ease">
 
-    <!-- Profile rail -->
-    <aside class="rail" aria-label="Profile">
-      <img class="photo" src="https://raw.githubusercontent.com/Huywii/huy-portfolio/main/Gemini_Generated_Image_fulh4zfulh4zfulh.png" alt="Portrait of Huy Ho">
-      <p class="name">Huy Ho</p>
-      <p class="title">Senior Product Manager</p>
-      <p class="where">Denton, TX (Dallas–Fort Worth)</p>
-      <span class="status">Open to Senior PM roles</span>
+<header style="border-bottom: 1px solid var(--line)">
+<nav aria-label="Main" style="max-width: 1120px; margin: 0 auto; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap">
+<a href="#top" style="font-family: 'Instrument Serif', Georgia, serif; font-size: 26px; letter-spacing: 0.01em; color: var(--head)">Huy Ho</a>
+<div style="display: flex; align-items: center; gap: 28px; flex-wrap: wrap; font-size: 14px">
+<a href="#work" style="color: var(--muted)">Impact</a>
+<a href="#projects" style="color: var(--muted)">Side projects</a>
+<a href="#experience" style="color: var(--muted)">Experience</a>
+<a href="#contact" style="color: var(--muted)">Contact</a>
+<a href="https://huywii.github.io/huy-portfolio/Huy_Ho_2026.pdf" style="padding: 10px 16px; border: 1px solid var(--border); border-radius: 999px; color: var(--text); font-weight: 500">Resume</a>
+<button type="button" id="themeToggle" aria-label="Switch to light mode" style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer; padding: 0">
+<svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+<svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+</button>
+</div>
+</nav>
+</header>
 
-      <nav class="nav" aria-label="Sections">
-        <ul>
-          <li><a href="#about">About</a></li>
-          <li><a href="#projects">Side projects</a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#education">Education</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
+<section id="top" style="max-width: 1120px; margin: 0 auto; padding: clamp(64px, 10vw, 112px) 24px clamp(56px, 8vw, 96px); display: flex; flex-wrap: wrap-reverse; align-items: center; justify-content: space-between; gap: 48px 56px">
+<div style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap">
+<span style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid var(--pill-border); background: var(--pill-bg); border-radius: 999px; font-size: 13px; color: var(--pill-text)"><span style="width: 7px; height: 7px; border-radius: 50%; background: var(--pill-dot)"></span>Open to Senior PM roles</span>
+<span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim)">Senior Product Manager · Dallas–Fort Worth</span>
+</div>
+<h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(44px, 7.2vw, 76px); line-height: 1.04; letter-spacing: -0.015em; color: var(--head); max-width: 880px">I build the software regulated companies <em style="font-style: italic; color: var(--accent)">rely on</em> for tax and compliance.</h1>
+<p style="margin: 0; max-width: 620px; font-size: 18px; color: var(--muted)">Senior Product Manager with 8+ years in enterprise SaaS across tax, cybersecurity, healthcare compliance, and regulatory technology. I take products from business case through launch, and I own roadmap, pricing and packaging, and the delivery of AI-enabled capabilities.</p>
+<div style="display: flex; gap: 12px; flex-wrap: wrap; padding-top: 8px">
+<a href="mailto:Huyhenryho@yahoo.com" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px; border-radius: 999px; background: var(--btn-bg); color: var(--btn-fg); font-weight: 600; font-size: 15px">Email me</a>
+<a href="https://huywii.github.io/huy-portfolio/Huy_Ho_2026.pdf" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px; border-radius: 999px; border: 1px solid var(--border); color: var(--text); font-weight: 500; font-size: 15px">Download resume</a>
+<a href="https://linkedin.com/in/huy-h-02a0a7108" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 12px; color: var(--muted); font-size: 15px">LinkedIn ↗</a>
+</div>
+</div>
+<img src="Portrait.jpeg" alt="Portrait of Huy Ho" width="400" height="400" style="flex: 0 0 auto; width: clamp(150px, 24vw, 300px); height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 28px; border: 1px solid var(--line)">
+</section>
 
-      <div class="rail-actions">
-        <a class="btn btn-primary" href="mailto:Huyhenryho@yahoo.com">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-          Email me
-        </a>
-        <a class="btn btn-secondary" href="Huy_Ho_2026.pdf" download>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"/></svg>
-          Download resume
-        </a>
-      </div>
-    </aside>
+<section id="work" aria-labelledby="impactTitle" style="max-width: 1120px; margin: 0 auto; padding: 0 24px clamp(72px, 10vw, 120px)">
+<h2 id="impactTitle" style="margin: 0 0 28px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim)">Selected impact</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 20px; overflow: hidden">
+<div style="background: var(--surf); padding: 32px 28px; display: flex; flex-direction: column; gap: 10px">
+<div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 60px; line-height: 1; color: var(--head)">20%</div>
+<p style="margin: 0; color: var(--muted); font-size: 15px">Company ARR growth supported by a new pricing and packaging model implemented with Bain &amp; Company</p>
+<div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent)">HITRUST</div>
+</div>
+<div style="background: var(--surf); padding: 32px 28px; display: flex; flex-direction: column; gap: 10px">
+<div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 60px; line-height: 1; color: var(--head)">40%</div>
+<p style="margin: 0; color: var(--muted); font-size: 15px">Higher adoption of targeted features after launching product analytics and in-app guides</p>
+<div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent)">HITRUST</div>
+</div>
+<div style="background: var(--surf); padding: 32px 28px; display: flex; flex-direction: column; gap: 10px">
+<div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 60px; line-height: 1; color: var(--head)">$40K</div>
+<p style="margin: 0; color: var(--muted); font-size: 15px">Revenue in the first month from in-app renewal and enrollment experiences</p>
+<div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent)">HITRUST</div>
+</div>
+<div style="background: var(--surf); padding: 32px 28px; display: flex; flex-direction: column; gap: 10px">
+<div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 60px; line-height: 1; color: var(--head)">4 → 1 wk</div>
+<p style="margin: 0; color: var(--muted); font-size: 15px">Customer onboarding time, cut by automating account creation on order submission</p>
+<div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent)">Wolters Kluwer</div>
+</div>
+<div style="background: var(--surf); padding: 32px 28px; display: flex; flex-direction: column; gap: 10px">
+<div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 60px; line-height: 1; color: var(--head)">140K+</div>
+<p style="margin: 0; color: var(--muted); font-size: 15px">Transaction types given citation references to support customers' audit defense</p>
+<div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent)">Wolters Kluwer</div>
+</div>
+<div style="background: var(--surf); padding: 32px 28px; display: flex; flex-direction: column; gap: 10px">
+<div style="font-family: 'Instrument Serif', Georgia, serif; font-size: 60px; line-height: 1; color: var(--head)">+10%</div>
+<p style="margin: 0; color: var(--muted); font-size: 15px">Successful API call rate for CCH SureTax, the tax engine ERP systems call in real time</p>
+<div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent)">Wolters Kluwer</div>
+</div>
+</div>
+</section>
 
-    <main>
+<section id="projects" aria-labelledby="projTitle" style="max-width: 1120px; margin: 0 auto; padding: 0 24px clamp(72px, 10vw, 120px)">
+<div style="display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: 36px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim)">Side projects</div>
+<h2 id="projTitle" style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(34px, 5vw, 48px); line-height: 1.1; color: var(--head)">Ideas, turned into working products.</h2>
+</div>
+<p style="margin: 0; max-width: 380px; color: var(--muted); font-size: 15px">Built with AI to show how quickly I can take a concept from a blank page to something people can use.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px">
 
-      <!-- About -->
-      <section id="about" class="intro">
-        <h1>I build the software regulated companies rely on for tax and compliance.</h1>
-        <p class="lede">
-          Senior Product Manager with 8+ years in enterprise SaaS across tax, cybersecurity, healthcare compliance, and regulatory technology, including 4 years owning product strategy and leading cross-functional engineering teams. I take products from business case through launch, and I own roadmap, pricing and packaging, and the delivery of AI-enabled capabilities.
-        </p>
+<article style="background: var(--surf); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column">
+<div style="height: 260px; background: var(--vis); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: center">
+<svg width="320" height="190" viewBox="0 0 320 190" fill="none" aria-hidden="true">
+<path d="M60 150 C 20 150, 20 60, 70 50 L 210 30 C 280 20, 300 90, 260 110 C 230 125, 200 100, 170 120 C 140 140, 150 160, 110 160 Z" stroke="var(--border)" stroke-width="22" stroke-linejoin="round"></path>
+<path d="M60 150 C 20 150, 20 60, 70 50 L 210 30 C 280 20, 300 90, 260 110 C 230 125, 200 100, 170 120 C 140 140, 150 160, 110 160 Z" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="6 7"></path>
+<circle cx="70" cy="50" r="6" fill="var(--accent)"></circle>
+<circle cx="210" cy="30" r="6" fill="var(--accent)"></circle>
+<circle cx="260" cy="110" r="6" fill="var(--accent)"></circle>
+<circle cx="110" cy="160" r="6" fill="var(--accent)"></circle>
+</svg>
+</div>
+<div style="padding: 32px; display: flex; flex-direction: column; gap: 14px; flex-grow: 1">
+<div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent)">3D driving game</div>
+<h3 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 34px; line-height: 1.1; color: var(--head)">Resume Circuit</h3>
+<p style="margin: 0; color: var(--muted)">Every interview starts with “walk me through your resume,” so I turned mine into a race. Drive a car inspired by the second-generation Audi R8 around a circuit, and each sector gate shows a stop in my career. Works on desktop with the keyboard and on phones with on-screen pedals.</p>
+<a href="https://huywii.github.io/huy-portfolio/resume-circuit.html" style="margin-top: auto; padding-top: 8px; font-weight: 500; color: var(--head)">Drive a lap →</a>
+</div>
+</article>
 
-        <div class="ledger" aria-label="Selected results">
-          <div>
-            <strong>20%</strong>
-            <p>Company ARR growth supported by a new pricing and packaging model I implemented with Bain &amp; Company</p>
-            <span>HITRUST</span>
-          </div>
-          <div>
-            <strong>40%</strong>
-            <p>Higher adoption of targeted features after launching product analytics and in-app guides</p>
-            <span>HITRUST</span>
-          </div>
-          <div>
-            <strong>$40K</strong>
-            <p>Revenue in the first month from in-app renewal and enrollment experiences</p>
-            <span>HITRUST</span>
-          </div>
-          <div>
-            <strong>1 week</strong>
-            <p>Customer onboarding time, down from 4 weeks, by automating account creation</p>
-            <span>Wolters Kluwer</span>
-          </div>
-          <div>
-            <strong>140,000+</strong>
-            <p>Transaction types given citation references to support audit defense</p>
-            <span>Wolters Kluwer</span>
-          </div>
-          <div>
-            <strong>+10%</strong>
-            <p>Successful API call rate for CCH SureTax, the tax engine ERP systems call in real time</p>
-            <span>Wolters Kluwer</span>
-          </div>
-        </div>
-      </section>
+<article style="background: var(--surf); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column">
+<div style="height: 260px; background: var(--vis); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: center">
+<svg width="320" height="190" viewBox="0 0 320 190" fill="none" aria-hidden="true">
+<rect x="20" y="75" width="70" height="40" rx="8" stroke="var(--art)" stroke-width="1.5"></rect>
+<rect x="125" y="30" width="70" height="40" rx="8" stroke="var(--accent)" stroke-width="1.5"></rect>
+<rect x="125" y="120" width="70" height="40" rx="8" stroke="var(--art)" stroke-width="1.5"></rect>
+<rect x="230" y="75" width="70" height="40" rx="8" stroke="var(--accent)" stroke-width="1.5"></rect>
+<path d="M90 95 L 125 50 M90 95 L 125 140 M195 50 L 230 95 M195 140 L 230 95" stroke="var(--art)" stroke-width="1.5"></path>
+<circle cx="160" cy="50" r="4" fill="var(--accent)"></circle>
+<circle cx="265" cy="95" r="4" fill="var(--accent)"></circle>
+</svg>
+</div>
+<div style="padding: 32px; display: flex; flex-direction: column; gap: 14px; flex-grow: 1">
+<div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent)">Interactive 3D model</div>
+<h3 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 34px; line-height: 1.1; color: var(--head)">How sales tax software works</h3>
+<p style="margin: 0; color: var(--muted)">Follow an invoice through a tax engine as it checks the address, applies the rules, and calculates the tax. Then follow a tax-exemption certificate through exemption certificate management as it is collected, validated, and stored.</p>
+<a href="https://huywii.github.io/huy-portfolio/tax-engine-ecm.html" style="margin-top: auto; padding-top: 8px; font-weight: 500; color: var(--head)">Open the 3D model →</a>
+</div>
+</article>
 
-      <!-- Side projects -->
-      <section id="projects">
-        <h2>Side projects</h2>
-        <div class="pair">
-          <div class="panel feature">
-            <h3>How sales tax software works: calculating tax and managing tax-exempt customers</h3>
-            <p>An interactive 3D model of the software businesses use to charge the right sales tax. Follow a sales invoice through a tax engine as it checks the address, applies the rules, and calculates the tax. Then follow a tax-exemption certificate, the form a customer such as a reseller provides to buy without paying sales tax, through exemption certificate management (ECM) as it is collected, validated, and stored. Each step explains what happens and shows sample data.</p>
-            <span class="pill">Interactive 3D</span>
-            <div><a class="btn btn-primary" href="tax-engine-ecm.html" target="_blank" rel="noopener">Open the 3D model</a></div>
-          </div>
-          <div class="panel">
-            <h3>Resume Circuit</h3>
-            <p>I'm passionate about cars, so I built a 3D driving game around my resume. Drive a car inspired by the second-generation Audi R8 around a race circuit, and each sector gate shows a stop in my career. It works on desktop with the keyboard and on phones with on-screen pedals.</p>
-            <span class="pill">3D driving game</span>
-            <div><a class="btn btn-primary" href="resume-circuit.html" target="_blank" rel="noopener">Drive a lap</a></div>
-          </div>
-        </div>
-      </section>
+<article style="background: var(--surf); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column">
+<div style="height: 260px; background: var(--vis); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: center">
+<svg width="320" height="190" viewBox="0 0 320 190" fill="none" aria-hidden="true">
+<circle cx="40" cy="40" r="5" fill="var(--art)"></circle>
+<circle cx="70" cy="95" r="5" fill="var(--art)"></circle>
+<circle cx="35" cy="150" r="5" fill="var(--art)"></circle>
+<circle cx="95" cy="60" r="5" fill="var(--art)"></circle>
+<circle cx="90" cy="135" r="5" fill="var(--art)"></circle>
+<path d="M110 95 L 150 95" stroke="var(--art)" stroke-width="1.5"></path>
+<path d="M144 89 L 150 95 L 144 101" stroke="var(--art)" stroke-width="1.5"></path>
+<rect x="170" y="45" width="130" height="20" rx="6" fill="var(--accent)"></rect>
+<rect x="170" y="85" width="95" height="20" rx="6" stroke="var(--accent)" stroke-width="1.5"></rect>
+<rect x="170" y="125" width="60" height="20" rx="6" stroke="var(--art)" stroke-width="1.5"></rect>
+</svg>
+</div>
+<div style="padding: 32px; display: flex; flex-direction: column; gap: 14px; flex-grow: 1">
+<div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent)">AI tool</div>
+<h3 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 34px; line-height: 1.1; color: var(--head)">Feedback Prioritizer</h3>
+<p style="margin: 0; color: var(--muted)">Turn raw customer feedback into a ranked list of what to build next. Paste reviews, tickets, or interview notes, pick a business goal, and AI groups the feedback into themes you can score, rank, and turn into a one-page PM brief.</p>
+<a href="https://claude.ai/artifact/61siGNzvBx8zF355Z3Q9oE" style="margin-top: auto; padding-top: 8px; font-weight: 500; color: var(--head)">Try the prioritizer →</a>
+</div>
+</article>
 
-      <!-- Experience -->
-      <section id="experience">
-        <h2>Experience</h2>
-        <div class="timeline">
+</div>
+</section>
 
-          <article class="role">
-            <div class="role-head">
-              <h3>Senior Product Manager</h3>
-              <span class="dates">May 2025 – Sep 2026</span>
-            </div>
-            <p class="org">HITRUST, Frisco, TX</p>
-            <ul>
-              <li>Owned strategy and roadmap for MyCSF, HITRUST's compliance and certification platform, serving 4,500 users across 2,000 accounts.</li>
-              <li>Implemented a new pricing and packaging model with Bain &amp; Company across product workflows and Salesforce, contributing to 20% company ARR growth.</li>
-              <li>Launched Pendo analytics and 15 in-app guides across 2 applications in 3 months, raising targeted feature adoption 40% and cutting support tickets 20%.</li>
-              <li>Built the executive business case for Pendo and connected it to Salesforce to tie product usage to accounts and ARR.</li>
-            </ul>
-            <details>
-              <summary><span class="more">Show 8 more</span><span class="less">Show less</span></summary>
-              <ul>
-                <li>Launched in-app CCSFP/CHQP renewal and enrollment experiences that brought in $40K in the first month.</li>
-                <li>Led Report Center, replacing emailed PDFs with an authenticated, permission-controlled workflow with watermarking and QR validation.</li>
-                <li>Used session replay to cut issue investigation time from about 2 hours to about 10 minutes.</li>
-                <li>Delivered the Certification Revocation Initiative, adding real-time certification status and cutting manual oversight 30%.</li>
-                <li>Defined the strategy for AI questionnaire automation that pre-fills compliance questionnaires from historical assessment data.</li>
-                <li>Shaped requirements for a new assurance initiative, including AI-assisted evidence evaluation and lightweight entry-level assessments.</li>
-                <li>Used generative AI to draft dev-ready user stories and surface dependencies and requirement gaps before refinement.</li>
-                <li>Led customer enablement for launches such as Report Center through in-app guidance, documentation, and webinars.</li>
-              </ul>
-            </details>
-          </article>
+<section id="experience" aria-labelledby="expTitle" style="max-width: 1120px; margin: 0 auto; padding: 0 24px clamp(72px, 10vw, 120px)">
+<div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 12px">Experience</div>
+<h2 id="expTitle" style="margin: 0 0 40px; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(34px, 5vw, 48px); line-height: 1.1; color: var(--head)">From writing the code to owning the roadmap.</h2>
 
-          <article class="role">
-            <div class="role-head">
-              <h3>Senior Technology Product Manager</h3>
-              <span class="dates">Dec 2022 – May 2025</span>
-            </div>
-            <p class="org">Wolters Kluwer, Coppell, TX</p>
-            <ul>
-              <li>Led strategy and roadmap for CCH SureTax, raising successful API call rates 10% and reducing transaction errors.</li>
-              <li>Deployed a machine learning SKU-mapping model that replaced manual product mapping and improved calculation accuracy.</li>
-              <li>Established Pendo analytics for SureTax (40 pages, 100 features), revealing drop-off points that shaped roadmap priorities.</li>
-              <li>Delivered citation references across 140,000+ transaction types to support customers' audit defense.</li>
-            </ul>
-            <details>
-              <summary><span class="more">Show 3 more</span><span class="less">Show less</span></summary>
-              <ul>
-                <li>Ran 20+ customer interviews that shaped SureTax priorities and later informed pricing for the CCH Investigator add-on.</li>
-                <li>Partnered with Sales, Support, and Marketing to prioritize customer-reported issues, reducing related support tickets.</li>
-                <li>Automated account creation on order submission, cutting customer onboarding from 4 weeks to 1.</li>
-              </ul>
-            </details>
-          </article>
+<div style="display: flex; flex-wrap: wrap; gap: 16px 32px; padding: 36px 0; border-top: 1px solid var(--line)">
+<div style="flex: 0 0 180px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 13px; color: var(--dim)">May 2025 – Sep 2026</div>
+<div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 4px">
+<h3 style="margin: 0; font-size: 20px; font-weight: 600; color: var(--head)">Senior Product Manager</h3>
+<div style="color: var(--muted)">HITRUST, Frisco, TX</div>
+</div>
+<ul style="margin: 0; padding-left: 18px; color: var(--muted); display: flex; flex-direction: column; gap: 8px; font-size: 15px; flex: 2 1 320px">
+<li>Owned strategy and roadmap for MyCSF, HITRUST's compliance and certification platform, serving 4,500 users across 2,000 accounts.</li>
+<li>Implemented a new pricing and packaging model with Bain &amp; Company, contributing to 20% company ARR growth.</li>
+<li>Built the executive business case for Pendo and launched 15 in-app guides in 3 months, raising targeted feature adoption 40%.</li>
+</ul>
+</div>
 
-          <article class="role">
-            <div class="role-head">
-              <h3>Senior Implementation Specialist</h3>
-              <span class="dates">Jul 2022 – Dec 2022</span>
-            </div>
-            <p class="org">Thomson Reuters, Carrollton, TX</p>
-            <ul>
-              <li>Served as subject matter expert for ONESOURCE Indirect Tax implementations in SAP ERP systems.</li>
-              <li>Filled technical and functional roles on indirect tax projects led by Thomson Reuters PMs, partner firms, and customers.</li>
-              <li>Advised clients on business processes and configured tax engines.</li>
-            </ul>
-            <details>
-              <summary><span class="more">Show 3 more</span><span class="less">Show less</span></summary>
-              <ul>
-                <li>Troubleshot and resolved software issues with fixes and workarounds.</li>
-                <li>Documented designs and solutions from business requirements sessions.</li>
-                <li>Managed projects through every phase, on time and within scope.</li>
-              </ul>
-            </details>
-          </article>
+<div style="display: flex; flex-wrap: wrap; gap: 16px 32px; padding: 36px 0; border-top: 1px solid var(--line)">
+<div style="flex: 0 0 180px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 13px; color: var(--dim)">Dec 2022 – May 2025</div>
+<div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 4px">
+<h3 style="margin: 0; font-size: 20px; font-weight: 600; color: var(--head)">Senior Technology Product Manager</h3>
+<div style="color: var(--muted)">Wolters Kluwer, Coppell, TX</div>
+</div>
+<ul style="margin: 0; padding-left: 18px; color: var(--muted); display: flex; flex-direction: column; gap: 8px; font-size: 15px; flex: 2 1 320px">
+<li>Led strategy and roadmap for CCH SureTax, raising successful API call rates 10% and reducing transaction errors.</li>
+<li>Deployed a machine learning SKU-mapping model that replaced manual product mapping and improved calculation accuracy.</li>
+<li>Automated account creation on order submission, cutting customer onboarding from 4 weeks to 1.</li>
+</ul>
+</div>
 
-          <article class="role">
-            <div class="role-head">
-              <h3>Senior Tax Analyst</h3>
-              <span class="dates">Sep 2019 – Jul 2022</span>
-            </div>
-            <p class="org">Thomson Reuters, Carrollton, TX</p>
-            <ul>
-              <li>Enhanced GoSystem tax software for federal and state projects.</li>
-              <li>Designed and coded IRS tax forms.</li>
-              <li>Led annual training for new analysts on proprietary tools.</li>
-            </ul>
-            <details>
-              <summary><span class="more">Show 5 more</span><span class="less">Show less</span></summary>
-              <ul>
-                <li>Debugged and tested software for paper and e-filed tax returns.</li>
-                <li>Cross-tested systems with tax departments.</li>
-                <li>Partnered with cross-functional teams to streamline tax software updates.</li>
-                <li>Mentored junior analysts on proprietary development tools.</li>
-                <li>Developed new tax form designs to meet IRS regulations.</li>
-              </ul>
-            </details>
-          </article>
+<div style="display: flex; flex-wrap: wrap; gap: 16px 32px; padding: 28px 0; border-top: 1px solid var(--line)">
+<div style="flex: 0 0 180px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 13px; color: var(--dim)">Jul 2022 – Dec 2022</div>
+<div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 4px">
+<h3 style="margin: 0; font-size: 18px; font-weight: 600; color: var(--head)">Senior Implementation Specialist</h3>
+<div style="color: var(--muted)">Thomson Reuters, Carrollton, TX</div>
+</div>
+<ul style="margin: 0; padding-left: 18px; color: var(--muted); display: flex; flex-direction: column; gap: 8px; font-size: 15px; flex: 2 1 320px">
+<li>Served as subject matter expert for ONESOURCE Indirect Tax implementations in SAP ERP systems.</li>
+<li>Advised clients on business processes and configured tax engines for optimal performance.</li>
+<li>Managed projects through every phase, on time and within scope.</li>
+</ul>
+</div>
 
-          <article class="role">
-            <div class="role-head">
-              <h3>Tax Analyst</h3>
-              <span class="dates">Jun 2018 – Aug 2019</span>
-            </div>
-            <p class="org">Wolters Kluwer, Wichita, KS</p>
-            <ul>
-              <li>Maintained and enhanced ProSystem and Axcess tax software.</li>
-              <li>Implemented enhancements from customer requests and tax law changes.</li>
-              <li>Resolved electronic filing rejects.</li>
-            </ul>
-            <details>
-              <summary><span class="more">Show 2 more</span><span class="less">Show less</span></summary>
-              <ul>
-                <li>Mentored analysts on tax questions.</li>
-                <li>Resolved time-sensitive customer queries.</li>
-              </ul>
-            </details>
-          </article>
+<div style="display: flex; flex-wrap: wrap; gap: 16px 32px; padding: 28px 0; border-top: 1px solid var(--line)">
+<div style="flex: 0 0 180px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 13px; color: var(--dim)">Sep 2019 – Jul 2022</div>
+<div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 4px">
+<h3 style="margin: 0; font-size: 18px; font-weight: 600; color: var(--head)">Senior Tax Analyst</h3>
+<div style="color: var(--muted)">Thomson Reuters, Carrollton, TX</div>
+</div>
+<ul style="margin: 0; padding-left: 18px; color: var(--muted); display: flex; flex-direction: column; gap: 8px; font-size: 15px; flex: 2 1 320px">
+<li>Enhanced GoSystem tax software for federal and state projects.</li>
+<li>Designed, coded, and tested IRS tax forms for paper and e-filed returns.</li>
+<li>Led annual training for new analysts and mentored junior analysts on proprietary tools.</li>
+</ul>
+</div>
 
-        </div>
-      </section>
+<div style="display: flex; flex-wrap: wrap; gap: 16px 32px; padding: 28px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line)">
+<div style="flex: 0 0 180px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 13px; color: var(--dim)">Jun 2018 – Aug 2019</div>
+<div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 4px">
+<h3 style="margin: 0; font-size: 18px; font-weight: 600; color: var(--head)">Tax Analyst</h3>
+<div style="color: var(--muted)">Wolters Kluwer, Wichita, KS</div>
+</div>
+<ul style="margin: 0; padding-left: 18px; color: var(--muted); display: flex; flex-direction: column; gap: 8px; font-size: 15px; flex: 2 1 320px">
+<li>Maintained and enhanced ProSystem and Axcess tax software.</li>
+<li>Implemented enhancements from customer requests and tax law changes.</li>
+<li>Resolved electronic filing rejects and time-sensitive customer queries.</li>
+</ul>
+</div>
+</section>
 
-      <!-- Skills -->
-      <section id="skills">
-        <h2>Skills</h2>
-        <div class="skills">
-          <div>
-            <h3>Product</h3>
-            <ul>
-              <li>Product strategy</li><li>Roadmapping</li><li>Pricing and packaging</li><li>0→1 development</li><li>Customer discovery</li><li>Product analytics</li><li>Lifecycle management</li><li>Stakeholder engagement</li><li>Prototyping</li>
-            </ul>
-          </div>
-          <div>
-            <h3>Tools</h3>
-            <ul>
-              <li>Pendo</li><li>Salesforce</li><li>JIRA</li><li>Azure DevOps</li><li>SQL</li><li>Power BI</li><li>Tableau</li><li>Figma</li><li>Microsoft Copilot</li>
-            </ul>
-          </div>
-          <div>
-            <h3>Domain</h3>
-            <ul>
-              <li>Tax technology</li><li>Healthcare compliance</li><li>Cybersecurity assurance</li><li>API strategy and integration</li><li>Risk assessment</li><li>AI-enabled products</li><li>Agile</li>
-            </ul>
-          </div>
-        </div>
-      </section>
+<section aria-labelledby="skillsTitle" style="max-width: 1120px; margin: 0 auto; padding: 0 24px clamp(72px, 10vw, 120px)">
+<h2 id="skillsTitle" style="margin: 0 0 28px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim)">Skills and education</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px">
+<div style="background: var(--surf); border: 1px solid var(--line); border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 16px">
+<h3 style="margin: 0; font-size: 16px; font-weight: 600; color: var(--head)">Product</h3>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--chip-text)">
+<span style="padding: 6px 12px; border: 1px solid var(--chip); border-radius: 999px">Product strategy</span>
+<span style="padding: 6px 12px; border: 1px solid var(--chip); border-radius: 999px">Roadmapping</span>
+<span style="padding: 6px 12px; border: 1px solid var(--chip); border-radius: 999px">Pricing and packaging</span>
+<span style="padding: 6px 12px; border: 1px solid var(--chip); border-radius: 999px">0 to 1 development</span>
+<span style="padding: 6px 12px; border: 1px solid var(--chip); border-radius: 999px">Customer discovery</span>
+<span style="padding: 6px 12px; border: 1px solid var(--chip); border-radius: 999px">Product analytics</span>
+<span style="padding: 6px 12px; border: 1px solid var(--chip); border-radius: 999px">Prototyping</span>
+</div>
+</div>
+<div style="background: var(--surf); border: 1px solid var(--line); border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 16px">
+<h3 style="margin: 0; font-size: 16px; font-weight: 600; color: var(--head)">Tools</h3>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--chip-text)">
+<span style="padding: 6px 12px; border: 1px solid var(--chip); border-radius: 999px">Pendo</span>
+<span style="padding: 6px 12px; border: 1px solid var(--chip); border-radius: 999px">Salesforce</span>
+<span style="padding: 6px 12px; border: 1px solid var(--chip); border-radius: 999px">JIRA</span>
+<span style="padding: 6px 12px; border: 1px solid var(--chip); border-radius: 999px">Azure DevOps</span>
+<span style="padding: 6px 12px; border: 1px solid var(--chip); border-radius: 999px">SQL</span>
+<span style="padding: 6px 12px; border: 1px solid var(--chip); border-radius: 999px">Power BI</span>
+<span style="padding: 6px 12px; border: 1px solid var(--chip); border-radius: 999px">Tableau</span>
+<span style="padding: 6px 12px; border: 1px solid var(--chip); border-radius: 999px">Figma</span>
+</div>
+</div>
+<div style="background: var(--surf); border: 1px solid var(--line); border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 16px">
+<h3 style="margin: 0; font-size: 16px; font-weight: 600; color: var(--head)">Education</h3>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="color: var(--head)">BBA in Finance, Minor in Management</div>
+<div style="color: var(--muted); font-size: 15px">Wichita State University, cum laude</div>
+<div style="color: var(--muted); font-size: 15px; padding-top: 10px">Languages: English, Vietnamese</div>
+</div>
+</div>
+</div>
+</section>
 
-      <!-- Education -->
-      <section id="education">
-        <h2>Education</h2>
-        <div class="panel">
-          <h3>Bachelor of Business Administration in Finance</h3>
-          <p>Wichita State University, Wichita, KS</p>
-          <p class="muted">Minor in Management, cum laude</p>
-          <p class="muted">Languages: English, Vietnamese</p>
-        </div>
-      </section>
+<section id="contact" aria-labelledby="contactTitle" style="border-top: 1px solid var(--line)">
+<div style="max-width: 1120px; margin: 0 auto; padding: clamp(72px, 10vw, 120px) 24px 56px; display: flex; flex-direction: column; gap: 28px; align-items: flex-start">
+<h2 id="contactTitle" style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(40px, 6vw, 64px); line-height: 1.05; color: var(--head); max-width: 780px">Hiring for a senior product role? <em style="color: var(--accent)">Let's talk.</em></h2>
+<p style="margin: 0; max-width: 560px; color: var(--muted); font-size: 17px">Looking for Senior Product Manager roles in compliance, tax, and regulatory technology, in Dallas–Fort Worth or remote.</p>
+<div style="display: flex; gap: 12px; flex-wrap: wrap">
+<a href="mailto:Huyhenryho@yahoo.com" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px; border-radius: 999px; background: var(--btn-bg); color: var(--btn-fg); font-weight: 600; font-size: 15px">Huyhenryho@yahoo.com</a>
+<a href="https://linkedin.com/in/huy-h-02a0a7108" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px; border-radius: 999px; border: 1px solid var(--border); color: var(--text); font-weight: 500; font-size: 15px">Connect on LinkedIn</a>
+</div>
+<div style="width: 100%; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 72px; font-size: 13px; color: var(--dim)">
+<span>© 2026 Huy Ho</span>
+<span>Denton, TX</span>
+</div>
+</div>
+</section>
 
-      <!-- Contact -->
-      <section id="contact">
-        <div class="contact">
-          <h2>Hiring for a senior product role? Let's talk.</h2>
-          <p>I'm looking for Senior Product Manager roles in compliance, tax, and regulatory technology, in the Dallas–Fort Worth area or remote.</p>
-          <div class="actions">
-            <a class="btn btn-primary" href="mailto:Huyhenryho@yahoo.com">Email Huyhenryho@yahoo.com</a>
-            <a class="btn btn-secondary" href="https://linkedin.com/in/huy-h-02a0a7108" target="_blank" rel="noopener">Connect on LinkedIn</a>
-            <a class="btn btn-secondary" href="Huy_Ho_2026.pdf" download>Download resume</a>
-          </div>
-        </div>
-        <footer>© 2026 Huy Ho</footer>
-      </section>
-
-    </main>
-  </div>
-
-  <!-- Tidio Chatbot -->
-  <script src="//code.tidio.co/tucioqts2nknzowz5n5rqbiwjtkebsqh.js" async></script>
-
-  <!-- Highlight the current section in the side nav -->
-  <script>
-    (function () {
-      var links = document.querySelectorAll('.nav a');
-      if (!('IntersectionObserver' in window) || !links.length) return;
-      var map = {};
-      links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
-      var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            links.forEach(function (a) { a.classList.remove('active'); });
-            var link = map[entry.target.id];
-            if (link) link.classList.add('active');
-          }
-        });
-      }, { rootMargin: '-40% 0px -55% 0px' });
-      document.querySelectorAll('main section[id]').forEach(function (s) { observer.observe(s); });
-    })();
-  </script>
+</div>
+<script>
+(function(){
+var root=document.documentElement,btn=document.getElementById('themeToggle');
+function label(){btn.setAttribute('aria-label',root.getAttribute('data-theme')==='light'?'Switch to dark mode':'Switch to light mode');}
+label();
+btn.addEventListener('click',function(){
+var next=root.getAttribute('data-theme')==='light'?'dark':'light';
+root.setAttribute('data-theme',next);
+try{localStorage.setItem('theme',next);}catch(e){}
+label();
+});
+})();
+</script>
 </body>
 </html>
