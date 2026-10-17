@@ -344,7 +344,7 @@ canvas{display:block}
 <aside class="panel" id="panel" aria-live="polite">
   <div class="panel-head">
     <div class="step-no"><b id="pNum">1</b><span id="pOf">Step 1 of 13</span></div>
-    <button class="link-btn" id="collapseBtn" aria-expanded="true" aria-controls="panelBody">Hide Details</button>
+
   </div>
   <div class="progress" aria-hidden="true"><span id="prog"></span></div>
   <h2 id="pTitle"></h2>
@@ -1235,10 +1235,10 @@ function focusStep(){
     var a = nodeObjs[s.path[0]].group.position;
     cam.goal.set((a.x+p.x)/2, 0, (a.z+p.z)/2);
     var span = Math.hypot(a.x-p.x, a.z-p.z);
-    cam.goalRadius = clamp(20 + span*0.8, 20, 70) * fitFactor(1.7);
+    cam.goalRadius = clamp(26 + span*0.8, 26, 75) * fitFactor(1.7);
   } else {
     cam.goal.set(p.x, 0, p.z);
-    cam.goalRadius = 22 * fitFactor(1.6);
+    cam.goalRadius = 34 * fitFactor(1.6);
   }
 }
 
@@ -1262,8 +1262,8 @@ speedBtn.addEventListener("click", function(){
   TRAVEL = SPEEDS[speed][0]; DWELL = SPEEDS[speed][1];
   speedBtn.textContent = "Speed: " + tc(speed);
 });
-var collapseBtn = document.getElementById("collapseBtn"), panelEl = document.getElementById("panel");
-collapseBtn.addEventListener("click", function(){
+var panelEl = document.getElementById("panel");
+if (false) (function(){
   var c = panelEl.classList.toggle("collapsed");
   collapseBtn.textContent = c ? "Show Details" : "Hide Details";
   collapseBtn.setAttribute("aria-expanded", String(!c));
@@ -1283,7 +1283,7 @@ document.querySelectorAll("[data-start]").forEach(function(btn){
     var k = btn.getAttribute("data-start");
     if (k !== flowKey) setFlow(k);
     collapsePicker();
-    follow = true; syncFollow(); goTo(0, false); playing = true; stepStart = performance.now()/1000; syncPlay();
+    follow = true; syncFollow(); goTo(0, false); playing = false; syncPlay(); document.getElementById("nextBtn").focus();
   });
 });
 document.getElementById("exploreBtn").addEventListener("click", function(){ closeIntro(); playing = false; syncPlay(); });
@@ -1365,18 +1365,35 @@ function frame(){
   // advance
   if (playing && el > travel + DWELL){ goTo(current+1, false); }
 
+  if (now - lastFrameCheck > 0.5){ lastFrameCheck = now; frameFreeArea(); }
   applyCamera();
   renderer.render(scene, camera);
   requestAnimationFrame(frame);
 }
 
 // ---------- Resize and theme ----------
+function frameFreeArea(w, h){
+  w = w || window.innerWidth; h = h || window.innerHeight;
+  var pr = panelEl.getBoundingClientRect(), tr = document.querySelector(".top").getBoundingClientRect();
+  var cr = document.querySelector(".controls").getBoundingClientRect();
+  var ox = 0, oy = 0;
+  if (isPhone()){
+    var top = tr.bottom, bottom = Math.min(pr.top, cr.top);
+    if (bottom > top) oy = Math.round(h/2 - (top + bottom)/2);
+  } else {
+    var left = 0, right = pr.left > 0 ? pr.left : w;
+    ox = Math.round(w/2 - (left + right)/2);
+  }
+  if (ox || oy) camera.setViewOffset(w, h, ox, oy, w, h); else camera.clearViewOffset();
+  camera.updateProjectionMatrix();
+}
+var lastFrameCheck = 0;
 function resize(){
   allLabels.forEach(sizeLabel);
   var w = window.innerWidth, h = window.innerHeight;
   renderer.setSize(w, h);
   camera.aspect = w/h;
-  if (isPhone()) camera.setViewOffset(w, h, 0, Math.round(h*0.2), w, h); else camera.clearViewOffset();
+  frameFreeArea(w, h);
   camera.updateProjectionMatrix();
 }
 window.addEventListener("resize", resize);
@@ -1404,7 +1421,7 @@ function start(){
   goTo(0, false);
   resetView();
   cam.target.copy(cam.goal); cam.radius = cam.goalRadius;
-  if (window.innerWidth < 760){ panelEl.classList.add("collapsed"); collapseBtn.textContent = "Show Details"; collapseBtn.setAttribute("aria-expanded","false"); }
+
   document.querySelector("[data-start]").focus();
   requestAnimationFrame(frame);
 }
