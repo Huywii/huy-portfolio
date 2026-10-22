@@ -28,6 +28,8 @@
   --post:#d27a22;
   --cust:#c94f74;
   --ecm:#4f8a2a;
+  --vat:#a87f00;
+  --gov:#5f6f80;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
@@ -47,6 +49,8 @@
     --post:#f0a24e;
     --cust:#ec7aa0;
     --ecm:#8cc45c;
+    --vat:#e2b93b;
+    --gov:#9aabbd;
   }
 }
 :root[data-theme="dark"]{
@@ -66,6 +70,8 @@
   --post:#f0a24e;
   --cust:#ec7aa0;
   --ecm:#8cc45c;
+  --vat:#e2b93b;
+  --gov:#9aabbd;
 }
 *,*::before,*::after{box-sizing:inherit}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -143,6 +149,7 @@ canvas{display:block}
 .top.started .flowpick{border:0;padding:0;background:none;margin-top:8px}
 .top.started h1{font-size:18px}
 .fp-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fp-btn[data-flow="vat"],.choice[data-start="vat"]{grid-column:1/-1}
 .fp-btn{font:inherit;text-align:left;cursor:pointer;color:var(--text);background:var(--chip);border:2px solid var(--border);border-radius:10px;padding:9px 12px;min-height:52px;display:flex;flex-direction:column;gap:1px}
 .fp-btn b{font-size:14px;font-weight:800}
 .fp-btn span{font-size:12px;color:var(--muted)}
@@ -317,9 +324,9 @@ canvas{display:block}
 <div id="stage" aria-label="3D model of a tax engine. Drag to rotate, scroll or pinch to zoom." role="img"></div>
 
 <header class="top">
-  <h1>How an Indirect Tax Engine and ECM Work Together</h1>
+  <h1>How an Indirect Tax Engine Works: Sales Tax, Exemptions, and VAT</h1>
   <div class="built-by">Built by Huy</div>
-  <p>Pick one of the two flows, then use Next and Back to walk through each step. Drag to look around.</p>
+  <p>Pick one of the three flows, then use Next and Back to walk through each step. Drag to look around.</p>
   <div class="flowpick" id="flowpick" role="group" aria-labelledby="fpLabel">
     <div class="fp-current">
       <span>Viewing: <b id="fpName">Tax Calculation</b> Flow</span>
@@ -329,6 +336,7 @@ canvas{display:block}
     <div class="fp-btns">
       <button type="button" class="fp-btn" data-flow="tax" aria-pressed="true"><b>1. Tax Calculation</b><span>Follow an Invoice</span></button>
       <button type="button" class="fp-btn" data-flow="ecm" aria-pressed="false"><b>2. Exemption Certificates</b><span>Follow a Certificate</span></button>
+      <button type="button" class="fp-btn" data-flow="vat" aria-pressed="false"><b>3. Cross-Border VAT</b><span>Follow a B2B Invoice from Ireland to France</span></button>
     </div>
   </div>
   <div class="legend" id="legend">
@@ -338,6 +346,8 @@ canvas{display:block}
     <span data-cat="ecm"><i style="background:var(--ecm)"></i>ECM</span>
     <span data-cat="customer"><i style="background:var(--cust)"></i>Customer</span>
     <span data-cat="post"><i style="background:var(--post)"></i>After the Sale</span>
+    <span data-cat="vat"><i style="background:var(--vat)"></i>VAT and E-invoicing</span>
+    <span data-cat="gov"><i style="background:var(--gov)"></i>Tax Authority</span>
   </div>
 </header>
 
@@ -405,11 +415,12 @@ canvas{display:block}
       <p class="callout-main">A sample of how I quickly turn an idea into a working project.</p>
       <p class="callout-by">Built by Huy</p>
     </div>
-    <p>This model follows a sales invoice through a tax engine, and an exemption certificate through ECM. Each step explains what happens and shows sample data.</p>
+    <p>This model follows a US sales invoice through a tax engine, an exemption certificate through ECM, and a cross-border B2B invoice through VAT and e-invoicing. Each step explains what happens and shows sample data.</p>
     <div class="choose-title">Choose a Flow</div>
     <div class="intro-choices">
       <button type="button" class="choice" data-start="tax"><b>Tax Calculation</b><span>Follow an Invoice</span></button>
       <button type="button" class="choice" data-start="ecm"><b>Exemption Certificates</b><span>Follow a Certificate</span></button>
+      <button type="button" class="choice" data-start="vat"><b>Cross-Border VAT</b><span>Follow a B2B invoice from Ireland to France</span></button>
     </div>
     <div class="intro-actions">
       <button class="link-btn intro-skip" id="exploreBtn" type="button">Explore on My Own</button>
@@ -425,11 +436,12 @@ canvas{display:block}
 "use strict";
 
 // ---------- Content ----------
-var CAT = { client:"--client", engine:"--engine", data:"--data", post:"--post", customer:"--cust", ecm:"--ecm" };
+var CAT = { client:"--client", engine:"--engine", data:"--data", post:"--post", customer:"--cust", ecm:"--ecm", vat:"--vat", gov:"--gov" };
 var SP = 1.5; // spacing multiplier between blocks
 var ENCLS = [
   {label:"Tax engine platform", cat:"engine", cx:3.2, cz:0,    w:22.8, d:15},
-  {label:"ECM platform",        cat:"ecm",    cx:1,   cz:20.5, w:18,   d:9}
+  {label:"ECM platform",        cat:"ecm",    cx:1,   cz:20.5, w:18,   d:9},
+  {label:"VAT and e-invoicing",  cat:"vat",    cx:-2,  cz:-22,  w:26,   d:8}
 ];
 
 var NODES = {
@@ -438,9 +450,9 @@ var NODES = {
   gateway:  {label:"API gateway",            cat:"engine",   pos:[-6.4,0,0],   size:[2.4,2.0,3.4]},
   addr:     {label:"Address service",        cat:"engine",   pos:[-2,0,2.6],  size:[2.8,1.3,2]},
   juris:    {label:"Jurisdiction service",   cat:"engine",   pos:[2.6,0,2.6], size:[2.8,1.3,2]},
-  nexus:    {label:"Nexus service",          cat:"engine",   pos:[11.4,0,0], size:[2.8,1.3,2]},
+  nexus:    {label:"Nexus service",          cat:"engine",   pos:[7.2,0,2.6], size:[2.8,1.3,2]},
   taxab:    {label:"Taxability service",     cat:"engine",   pos:[7.2,0,-2.6],   size:[2.8,1.3,2]},
-  exempt:   {label:"Exemption service",      cat:"engine",   pos:[7.2,0,2.6],  size:[2.8,1.3,2]},
+  exempt:   {label:"Exemption service",      cat:"engine",   pos:[11.4,0,0],  size:[2.8,1.3,2]},
   rates:    {label:"Rate service",           cat:"engine",   pos:[2.6,0,-2.6],  size:[2.8,1.3,2]},
   calc:     {label:"Calculation service",    cat:"engine",   pos:[-2,0,-2.6],   size:[2.8,1.3,2]},
   cache:    {label:"Cache (rates and rules)",cat:"data",     pos:[4.6,0,-6],   size:[2.0,1.2,2.0], cyl:true},
@@ -454,7 +466,14 @@ var NODES = {
   validate: {label:"Validation",             cat:"ecm",      pos:[5,0,18.3],   size:[2.8,1.3,2]},
   bulk:     {label:"Bulk import",            cat:"ecm",      pos:[-4,0,22.7],  size:[2.8,1.3,2]},
   monitor:  {label:"Expiration monitor",     cat:"ecm",      pos:[0.5,0,22.7], size:[2.8,1.3,2]},
-  audit:    {label:"Exemption audit reports",cat:"post",     pos:[15,0,20.5],  size:[2.8,1.6,2.2]}
+  audit:    {label:"Exemption audit reports",cat:"post",     pos:[15,0,20.5],  size:[2.8,1.6,2.2]},
+  vatid:    {label:"VAT ID validation",      cat:"vat",      pos:[-11,0,-21],  size:[2.8,1.3,2]},
+  vies:     {label:"VAT registries (VIES)",  cat:"gov",      pos:[-11,0,-29],  size:[2.4,2.0,2.4], cyl:true},
+  pos:      {label:"Place of supply",        cat:"vat",      pos:[-5,0,-21],   size:[2.8,1.3,2]},
+  rc:       {label:"Reverse charge or local VAT", cat:"vat", pos:[1,0,-21],    size:[2.8,1.3,2]},
+  einv:     {label:"E-invoice builder",      cat:"vat",      pos:[7,0,-21],    size:[2.8,1.3,2]},
+  auth:     {label:"Tax authority platform", cat:"gov",      pos:[16,0,-21],   size:[2.8,1.8,2.4]},
+  vreturn:  {label:"VAT return",             cat:"post",     pos:[16,0,-29],   size:[2.8,1.6,2.2]}
 };
 
 var TAX_STEPS = [
@@ -483,17 +502,17 @@ var TAX_STEPS = [
    where:"Jurisdiction service",
    desc:"Using the location and sourcing rules (origin or destination based), the service finds every jurisdiction that can tax this sale: state, county, city, and special districts like transit.",
    code:'Jurisdictions found:\n  State B\n  County X\n  City Y\n  Transit district Z\nSourcing: destination'},
-  {at:"exempt", path:["juris","exempt"], kind:"request", uses:["certs"],
-   title:"Exemptions are checked",
-   where:"Exemption service, before nexus and taxability",
-   desc:"The customer's exemption status arrives with the request, but it can only be confirmed once the jurisdictions are known, because certificates are issued for specific jurisdictions. The service checks for a valid certificate covering these jurisdictions. Entity-based exemptions, like government or charity, exempt the whole sale. Use-based exemptions, like resale or manufacturing, only cover qualifying products, so they are applied line by line in the taxability step.",
-   code:'Customer C-2231, ship to State B\n  Certificate for State B: none\n  Result: not exempt, calculation continues\n\nIf a valid certificate were found:\n  Entity-based: tax = $0.00 for the sale\n  Use-based: exempt qualifying lines only'},
-  {at:"nexus", path:["exempt","nexus"], kind:"request",
+  {at:"nexus", path:["juris","nexus"], kind:"request",
    title:"Nexus is checked",
    where:"Nexus service",
-   desc:"For each jurisdiction, the service checks whether the company is obligated to collect tax there, based on physical presence or economic nexus settings configured for the company.",
-   code:'State B: nexus = yes (economic)\nLocal jurisdictions follow state\nNo nexus = no tax collected'},
-  {at:"taxab", path:["nexus","taxab"], kind:"request", uses:["cache"],
+   desc:"For each jurisdiction, the service checks whether the company is obligated to collect tax there, based on physical presence or economic nexus settings configured for the company. If there's no nexus, no tax is collected and the remaining checks don't matter, which is why this comes before exemptions.",
+   code:'State B: nexus = yes (economic)\nLocal jurisdictions usually follow the state\n  (home rule states like Colorado, Louisiana,\n  and Alabama can have separate local rules)\nNo nexus = no tax collected'},
+  {at:"exempt", path:["nexus","exempt"], kind:"request", uses:["certs"],
+   title:"Exemptions are checked",
+   where:"Exemption service, after nexus and before taxability",
+   desc:"Once the engine knows the company has to collect in these jurisdictions, it checks whether this customer is exempt there. Certificates are issued for specific jurisdictions, so the service looks for a valid certificate covering them. Entity-based exemptions, like government or charity, exempt the whole sale. Use-based exemptions, like resale or manufacturing, only cover qualifying products, so they are applied line by line in the taxability step.",
+   code:'Customer C-2231, ship to State B\n  Certificate for State B: none\n  Result: not exempt, calculation continues\n  (The Exemption Certificates flow shows how\n  C-2231 gets a certificate on file.)\n\nIf a valid certificate were found:\n  Entity-based: tax = $0.00 for the sale\n  Use-based: exempt qualifying lines only'},
+  {at:"taxab", path:["exempt","taxab"], kind:"request", uses:["cache"],
    title:"Product taxability and tax rules are applied",
    where:"Taxability service",
    desc:"Each line's tax code is matched to the rules for each jurisdiction, and any use-based exemptions are applied to qualifying lines. Pre-tax rules change the amount being taxed, like discounts, freight, partial taxability, and thresholds. Post-tax rules adjust the tax after rates are applied, like maximum tax caps, tax holidays, and rounding.",
@@ -529,7 +548,7 @@ var ECM_STEPS = [
   {at:"erp", path:null, kind:"request", chip:"Exempt order",
    title:"An exempt customer places an order",
    where:"Company systems",
-   desc:"A reseller places an order. They say the purchase is for resale, but there's no certificate on file yet, so the sale can't be treated as exempt.",
+   desc:"A reseller places an order. This is the same customer, C-2231, who was taxed in the Tax Calculation flow because no certificate was on file. They say the purchase is for resale, but until a valid certificate is on file, the sale can't be treated as exempt.",
    code:'Order SO-20931\nCustomer: C-2231 (reseller)\nShip to: State B\nExemption claimed: resale\nCertificate on file: none'},
   {at:"customer", path:["erp","portal","customer"], kind:"request", chip:"Request Sent",
    title:"The seller requests a certificate",
@@ -593,11 +612,51 @@ var ECM_STEPS = [
    code:'Audit sample: 250 exempt invoices\n  Valid certificate found: 250\n  Missing or invalid:        0\n  Potential assessment:  $0.00'}
 ];
 
-var FLOWS = { tax:{steps:TAX_STEPS, name:"Tax Calculation"}, ecm:{steps:ECM_STEPS, name:"Exemption Certificates"} };
+
+var VAT_STEPS = [
+  {at:"erp", path:null, kind:"request", chip:"Cross-border invoice",
+   title:"A cross-border B2B invoice is created",
+   where:"Company systems",
+   desc:"A software company established in Ireland sells a SaaS subscription to a business in France. Outside the US there's no sales tax on this sale. It's VAT, and the first question is whether the buyer is a business.",
+   code:'Invoice INV-EU-2041\nSeller: ACME Software Ltd (Ireland)\n  VAT ID: IE (illustrative)\nBuyer:  Client SAS (France)\n  VAT ID provided: FR (illustrative)\nLine 1: SaaS subscription   EUR 1,000.00'},
+  {at:"vatid", path:["erp","conn","gateway","vatid"], kind:"request", chip:"Validate VAT ID", uses:["vies"],
+   title:"The buyer's VAT ID is validated",
+   where:"VAT ID validation, checked against official registries",
+   desc:"The engine checks the buyer's VAT number against the official registry, which is VIES in the EU. A valid number proves the buyer is a business, and that one answer decides whether this is B2B or B2C. The seller keeps the validation result as evidence.",
+   code:'Lookup: VIES\n  VAT ID: FR (illustrative)\n  Status: valid\n  Name: Client SAS (matches)\n  Checked: 2026-09-29 10:42 UTC\nResult: B2B'},
+  {at:"pos", path:["vatid","pos"], kind:"request", chip:"Place of supply",
+   title:"Place of supply is determined",
+   where:"Place of supply rules",
+   desc:"Place of supply decides which country's VAT applies. It's VAT's version of sourcing. For B2B services like SaaS, the general rule is where the business customer is established, so this sale is supplied in France, not Ireland.",
+   code:'Supply type: electronically supplied service\nCustomer: business (valid VAT ID)\nRule: B2B general rule\nPlace of supply: France\n\nIf the buyer were a consumer:\n  Place of supply = where they live'},
+  {at:"rc", path:["pos","rc"], kind:"request", chip:"Reverse charge",
+   title:"Reverse charge applies",
+   where:"Reverse charge or local VAT",
+   desc:"Because the seller isn't established in France and the buyer is a French business, the buyer accounts for the French VAT instead of the seller. The invoice shows no VAT and a reverse charge note. If the buyer had been a consumer, the seller would charge French VAT at 20% and report it through the EU One Stop Shop (OSS).",
+   code:'B2B, cross-border, valid VAT ID\n  Seller charges VAT:   EUR 0.00\n  Invoice note: "Reverse charge"\n  Buyer self-accounts:  French VAT 20%\n\nB2C alternative (no valid VAT ID)\n  Seller charges FR VAT 20%: EUR 200.00\n  Reported through OSS'},
+  {at:"einv", path:["rc","einv"], kind:"doc", chip:"E-invoice",
+   title:"A compliant e-invoice is built",
+   where:"E-invoice builder",
+   desc:"In VAT, the invoice is the key document, because it's what lets the buyer reclaim VAT. More and more countries require it as structured data, not a PDF, in formats like UBL through the Peppol network. The invoice has to carry both VAT IDs and the reverse charge note.",
+   code:'Format: structured XML (UBL)\nRequired fields\n  Seller VAT ID          present\n  Buyer VAT ID           present\n  Reverse charge note    present\n  VAT amount             EUR 0.00\nDelivery: Peppol network'},
+  {at:"auth", path:["einv","auth"], kind:"doc", chip:"Clearance",
+   title:"The invoice is cleared or reported",
+   where:"Tax authority platform",
+   desc:"Under continuous transaction controls, the tax authority sees invoice data as it happens. In clearance countries like Italy, Mexico, and India, an invoice isn't valid until the government platform approves it. France's mandate, starting Sept 2026, routes domestic B2B invoices through certified platforms and requires e-reporting for cross-border sales like this one.",
+   code:'Country model\n  Italy, Mexico, India: clearance\n    (approved before it is valid)\n  France (Sept 2026): certified platforms\n    cross-border sale: e-reported\nStatus: reported (illustrative)'},
+  {at:"vreturn", path:["auth","vreturn"], kind:"commit", chip:"VAT return",
+   title:"It flows into the VAT returns",
+   where:"After the sale",
+   desc:"VAT due is output VAT on sales minus input VAT on purchases. The Irish seller reports this as a reverse charge sale with no VAT and lists it on its EU sales report. The French buyer records French VAT as both output and input, so it usually nets to zero if they can fully reclaim it. Because the authority already has the invoice data, mismatches show up fast.",
+   code:'Seller (Ireland) VAT return\n  Reverse charge supply   EUR 1,000.00\n  VAT charged                    0.00\n  Also on EU sales report\n\nBuyer (France) VAT return\n  Output VAT (self-assessed) EUR 200.00\n  Input VAT (reclaimed)      EUR 200.00\n  Net                           0.00'}
+];
+var FLOWS = { tax:{steps:TAX_STEPS, name:"Tax Calculation"}, ecm:{steps:ECM_STEPS, name:"Exemption Certificates"}, vat:{steps:VAT_STEPS, name:"Cross-Border VAT"} };
+var FLOW_ORDER = ["tax","ecm","vat"];
+function nextFlow(k){ return FLOW_ORDER[(FLOW_ORDER.indexOf(k)+1) % FLOW_ORDER.length]; }
 var flowKey = "tax";
 var STEPS = TAX_STEPS;
 
-var DATA_LINKS = [["content","cache"],["cache","addr"],["cache","juris"],["cache","taxab"],["cache","rates"],["certs","exempt"],["txdb","calc"]];
+var DATA_LINKS = [["content","cache"],["cache","addr"],["cache","juris"],["cache","taxab"],["cache","rates"],["certs","exempt"],["txdb","calc"],["vies","vatid"]];
 
 // ---------- Helpers ----------
 var allLabels = [];
@@ -740,7 +799,7 @@ function buildScene(){
     var eEdges = new THREE.LineSegments(new THREE.EdgesGeometry(eGeo),
       new THREE.LineBasicMaterial({color:new THREE.Color(catColor(E.cat)), transparent:true, opacity:0.55}));
     eEdges.position.set(E.cx*SP, 2.1, E.cz*SP);
-    var faded = E.cat === "ecm" && flowKey === "tax";
+    var faded = (E.cat === "ecm" && flowKey !== "ecm") || (E.cat === "vat" && flowKey !== "vat");
     if (faded) eEdges.material.opacity = 0.15;
     world.add(eEdges);
     var floor = new THREE.Mesh(new THREE.PlaneGeometry(E.w*SP, E.d*SP),
@@ -887,7 +946,7 @@ var cam = {
   target:new THREE.Vector3(-1,0,1), goal:new THREE.Vector3(-1,0,1),
   radius:44, goalRadius:44, theta:0.35, goalTheta:0.35, phi:0.95, goalPhi:0.95
 };
-var DEFAULT_VIEW = {target:[-3,0,7.5], radius:92, theta:0.35, phi:0.92};
+var DEFAULT_VIEW = {target:[-2,0,-2], radius:108, theta:0.35, phi:0.92};
 function fitFactor(max){
   var aspect = window.innerWidth / Math.max(1, window.innerHeight);
   return aspect < 1.2 ? clamp(1.1/aspect, 1, max) : 1;
@@ -987,9 +1046,11 @@ function pick(x, y){
   if (id === "content") id = "cache";
   var idx = findStep(STEPS, id);
   if (idx !== undefined){ goTo(idx, true); return; }
-  var other = flowKey === "tax" ? "ecm" : "tax";
-  var j = findStep(FLOWS[other].steps, id);
-  if (j !== undefined){ setFlow(other); goTo(j, true); }
+  for (var f=0; f<FLOW_ORDER.length; f++){
+    var other = FLOW_ORDER[f]; if (other === flowKey) continue;
+    var j = findStep(FLOWS[other].steps, id);
+    if (j !== undefined){ setFlow(other); goTo(j, true); return; }
+  }
 }
 function findStep(list, id){
   for (var i=0;i<list.length;i++){ if (list[i].at === id) return i; }
@@ -1050,10 +1111,11 @@ function txBreakdown(focus){
     '<div class="scr-muted" style="font-size:11.5px;font-weight:700">Why This Tax Was Charged</div>' +
     '<h4 style="margin:2px 0 6px"><span class="scr-mono" style="font-size:14px">INV-10482</span></h4>' +
     stageH(1, "Location and Jurisdictions", rowH("Ship to", "State B") + rowH("Jurisdictions", "4 found")) +
-    stageH(2, "Exemption Check", rowH("Certificate for State B", "None") + rowH("Result", "Not exempt")) +
-    stageH(3, "Pre-Tax Rules", rowH("Invoice total", "$1,040.00") + rowH("Freight exclusion", "-$40.00") + rowH("Taxable base", "$1,000.00", true)) +
-    stageH(4, "Tax by Jurisdiction", rowH("State B, 5.00%", "$50.00") + rowH("County X, 1.00%", "$10.00") + rowH("City Y, 2.00%", "$20.00") + rowH("Transit Z, 0.25%", "$2.50")) +
-    stageH(5, "Post-Tax Rules", rowH("Caps and holidays", "None") + rowH("Rounding", "No change")) +
+    stageH(2, "Nexus Check", rowH("State B", "Nexus: yes (economic)")) +
+    stageH(3, "Exemption Check", rowH("Certificate for State B", "None") + rowH("Result", "Not exempt")) +
+    stageH(4, "Pre-Tax Rules", rowH("Invoice total", "$1,040.00") + rowH("Freight exclusion", "-$40.00") + rowH("Taxable base", "$1,000.00", true)) +
+    stageH(5, "Tax by Jurisdiction", rowH("State B, 5.00%", "$50.00") + rowH("County X, 1.00%", "$10.00") + rowH("City Y, 2.00%", "$20.00") + rowH("Transit Z, 0.25%", "$2.50")) +
+    stageH(6, "Post-Tax Rules", rowH("Caps and holidays", "None") + rowH("Rounding", "No change")) +
     '<div class="scr-total"><span>Total Tax</span><b>$82.50</b></div>', focus);
 }
 function txScreen(focus){
@@ -1209,7 +1271,7 @@ function goTo(i, userInitiated){
   panel.of.appendChild(fnm);
   panel.of.appendChild(document.createTextNode(", Step " + (current+1) + " of " + STEPS.length));
   var nb = document.getElementById("nextBtn");
-  if (current === STEPS.length - 1){ nb.innerHTML = "Try the " + FLOWS[flowKey === "tax" ? "ecm" : "tax"].name + " Flow &rarr;"; }
+  if (current === STEPS.length - 1){ nb.innerHTML = "Try the " + FLOWS[nextFlow(flowKey)].name + " Flow &rarr;"; }
   else { nb.innerHTML = "Next &rarr;"; }
   document.getElementById("prog").style.width = ((current+1)/STEPS.length*100) + "%";
   if (userInitiated && playing){ playing = false; syncPlay(); }
@@ -1248,7 +1310,7 @@ function syncPlay(){ playBtn.innerHTML = playing ? "&#10074;&#10074; Pause Tour"
 function syncFollow(){ followBtn.setAttribute("aria-pressed", String(follow)); }
 playBtn.addEventListener("click", function(){ playing = !playing; if (playing) stepStart = performance.now()/1000 - (STEPS[current].path ? 0 : 0); syncPlay(); });
 document.getElementById("nextBtn").addEventListener("click", function(){
-  if (current === STEPS.length - 1){ setFlow(flowKey === "tax" ? "ecm" : "tax"); goTo(0, true); }
+  if (current === STEPS.length - 1){ setFlow(nextFlow(flowKey)); goTo(0, true); }
   else goTo(current+1, true);
 });
 document.getElementById("prevBtn").addEventListener("click", function(){ goTo(current-1, true); });
@@ -1435,3 +1497,4 @@ if (document.fonts && document.fonts.ready){
 </script>
 </body>
 </html>
+
